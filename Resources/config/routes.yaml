@@ -1,0 +1,11 @@
+cas:
+    path: /cas
+    controller: Viduc\CasBundle\Controller\CasController::index
+
+enTantQue:
+    path: /en_tant_que
+    controller: Viduc\CasBundle\Controller\EnTantQueController::connecterEnTantQue
+
+enTantQueRestore:
+    path: /en_tant_que_restore
+    controller: Viduc\CasBundle\Controller\EnTantQueController::restaurerEnTantQue

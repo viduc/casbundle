@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion en tant que{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+    <div class="example-wrapper">
+        <h1>Connexion en tant que</h1>
+        {{ form_start(form) }}
+            <label for="users">Utilisateurs</label>
+            {{ form_widget(form.users, {'attr': {'class': 'form-control',
+                'placeholder': "users"}}) }}
+
+            <input type="submit" value="Se connecter en tant que"/>
+        {{ form_end(form) }}
+    </div>
+    <div class="example-wrapper">
+        {% if app.session.get('enTantQue.seConnecterReferent') is defined
+            and app.session.get('enTantQue.seConnecterReferent') != null
+        %}
+            <a href="{{ path('enTantQueRestore') }}">Revenir à ma session</a>
+        {% endif %}
+    </div>
+{% endblock %}

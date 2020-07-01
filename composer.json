@@ -4,7 +4,7 @@
     "description": "bundle d'authentification cas pour les applications symfony",
     "keywords": ["cas"],
     "homepage": "",
-    "license": "GPLv3",
+    "license": "GPL-3.0-or-later",
     "version": "0.0.1",
     "authors": [
         {

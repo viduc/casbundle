@@ -2,10 +2,10 @@
 
 use Symfony\Component\Dotenv\Dotenv;
 
-require '../../../vendor/autoload.php';
+require getenv("DOCUMENT_ROOT") . '/vendor/autoload.php';
 
-if (file_exists('../../../config/bootstrap.php')) {
-    require '../../../config/bootstrap.php';
+if (file_exists(getenv("DOCUMENT_ROOT") . '/config/bootstrap.php')) {
+    require getenv("DOCUMENT_ROOT") . '/config/bootstrap.php';
 } elseif (method_exists(Dotenv::class, 'bootEnv')) {
-    (new Dotenv())->bootEnv('../../../.env');
+    (new Dotenv())->bootEnv(getenv("DOCUMENT_ROOT") . '/.env');
 }

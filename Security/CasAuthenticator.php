@@ -57,7 +57,7 @@ class CasAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        phpCAS::setDebug('phpCas.log');
+        phpCAS::setDebug();
         phpCAS::setVerbose(true);
         if (!phpCAS::isInitialized()) {
             phpCAS::client(

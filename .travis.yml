@@ -7,6 +7,6 @@ script:
   - composer install
   - composer require symfony/phpunit-bridge
   - composer require symfony/http-foundation
-  - composer require framework-bundle
-  - composer require security-core
+  - composer require symfony/framework-bundle
+  - composer require symfony/security-core
   - vendor/bin/phpunit

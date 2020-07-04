@@ -5,4 +5,8 @@ php:
 
 script:
   - composer install
+  - composer require symfony/phpunit-bridge
+  - composer require symfony/http-foundation
+  - composer require framework-bundle
+  - composer require security-core
   - vendor/bin/phpunit

@@ -84,7 +84,7 @@ class UgaUserProviderTest extends TestCase
 
         /* test avec login présent et object user présent et valide */
         $this->session->set('enTantQue.seConnecter', 'test');
-        $user = new UgaUser();
+        $user = new CasUser();
         $user->setUsername('test');
         $this->session->set('enTantQue.seConnecterUserObject', $user);
         $this->assertInstanceOf(

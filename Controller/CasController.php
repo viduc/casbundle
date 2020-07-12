@@ -9,7 +9,6 @@ use Viduc\CasBundle\Security\CasUser;
 
 class CasController extends AbstractController
 {
-    private $session;
 
     public function __construct(SessionInterface $session)
     {
@@ -21,9 +20,10 @@ class CasController extends AbstractController
         $user2->setRoles(['ROLE_USER']);
         $users[] = $user1;
         $users[] = $user2;
-        $this->session = $session;
-        $this->session->set('enTantQue.users', $users);
+        $session = $session;
+        $session->set('enTantQue.users', $users);
     }
+
     public function index(Request $request)
     {
         return $this->render('@Cas/index.html.twig', [

@@ -14,7 +14,7 @@ AUTEUR
 STATUT
 ------
 [![Build Status](https://api.travis-ci.com/viduc/casbundle.svg)](https://travis-ci.com/viduc/casbundle)
-
+[![Coverage](https://codecov.io/gh/viduc/casbundle/branch/master/graph/badge.svg)](https://codecov.io/gh/viduc/casbundle/)
 
 LICENSE
 -------

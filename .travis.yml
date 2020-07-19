@@ -10,6 +10,7 @@ script:
   - composer require symfony/framework-bundle
   - composer require symfony/security-core
   - vendor/bin/phpunit --coverage-clover=coverage.xml
+  - vendor/bin/phpcs --file-list=phpcs --report-file='checkstyle.xml' --report=checkstyle --standard=PSR2 --extensions=php
 
 after_success:
   # Submit coverage report to https://codecov.io

@@ -7,6 +7,7 @@ script:
   - composer require symfony/phpunit-bridge:3.4.42
   - composer require symfony/http-foundation:3.4.42
   - composer require symfony/framework-bundle:3.4.42
+  - composer require symfony/security-core:3.4.42
   - composer require symfony/console:3.4.42
   - composer require codeclimate/php-test-reporter
   - vendor/bin/phpunit --coverage-clover=coverage.xml

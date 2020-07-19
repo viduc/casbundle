@@ -4,8 +4,8 @@ php:
   - '7.3'
 script:
   - composer install
-  - composer require symfony/phpunit-bridge
-  - composer require symfony/http-foundation
+  - composer require symfony/phpunit-bridge:3.4.42
+  - composer require symfony/http-foundation:3.4.42
   - composer require symfony/framework-bundle:3.4.42
   - composer require symfony/console:3.4.42
   - composer require codeclimate/php-test-reporter

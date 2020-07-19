@@ -13,7 +13,6 @@ script:
   - composer require symfony/phpunit-bridge
   - composer require symfony/http-foundation
   - composer require symfony/framework-bundle
-  - composer require symfony/security-core
   - vendor/bin/phpunit --coverage-clover=coverage.xml
 
 after_script:

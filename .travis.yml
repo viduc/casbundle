@@ -9,4 +9,8 @@ script:
   - composer require symfony/http-foundation
   - composer require symfony/framework-bundle
   - composer require symfony/security-core
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit -- --coverage-clover=coverage.xml
+
+after_success:
+  # Submit coverage report to https://codecov.io
+  - bash <(curl -s https://codecov.io/bash)

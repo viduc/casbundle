@@ -2,22 +2,12 @@ language: php
 php:
   - '7.2'
   - '7.3'
-
-addons:
-  code_climate:
-    repo_token:
-      secure: "pRyoy43AQ+e1MgmZI3xfZf8Q62RzgpfpK3yYClKsFi6PFx4qO0ELi9FeuoggxjRLsrNp2cNvtGAfxVQAxvN8AUr6kbxGeQGPUMxvqj+BXnkAj2T+RFZFoHNcQqY4wCS7Lc3kpiaEJ8iKmtrU8PS3B24W7kgDVOda68tf5mundaPPK6VebZ/ujM9HcHILWmbW01Yl/2uSRz2RowlRhyz2OKAycYYf2LfQE1XJrnkK6r3nLAhAIrxtH0Te/XtY/gdVHwZdTaz+hpfHSpSrDw39Bvbrjgf37iQ/1QZp+IyX7tfmt79mclxrVvMFJjkp+qWBU4uzLLTSLpZf4BTNE2gkE5bOMSMC7Hjx1MPy5sXiy60WcF6DCPnjWqVg9Ebrupt9g9IeTaSe5D/zeBid4SdtY94MZOBTqp1HqKqJPgBtlc+uGvhfP78hcjkgcTkdcf5pONC0P1oOo6vGIkRn5vSZriBH24Ur4Y9lTAKI4UnjMYV6fV1USp1S0wtZDMWhuhfXgMmo+ChwhH9FP6Qp2l8vsbd1a+DndaeqW0Mm4KYZhxLkmmVvTdIbYQecN4L00+uyFJw4MzggF4IDufbyupJODeywxTJTBohiE9ETEUxqg2JpHQrtPVw+QAibqvxN//BUH8bLD7b9ednWbJbC3X5tef+ONjDh0Kg0Evxzb7AntkI="
-
 script:
   - composer install
   - composer require symfony/phpunit-bridge
   - composer require symfony/http-foundation
   - composer require symfony/framework-bundle
   - vendor/bin/phpunit --coverage-clover=coverage.xml
-
-after_script:
-  - vendor/bin/test-reporter
-
 after_success:
   # Submit coverage report to https://codecov.io
   - bash <(curl -s https://codecov.io/bash)

@@ -6,7 +6,7 @@ script:
   - composer install
   - composer require symfony/phpunit-bridge
   - composer require symfony/http-foundation
-  - composer require symfony/framework-bundle:5.1
+  - composer require symfony/framework-bundle:5.0
   - composer require codeclimate/php-test-reporter
   - vendor/bin/phpunit --coverage-clover=coverage.xml
 after_success:

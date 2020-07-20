@@ -2,11 +2,13 @@ language: php
 php:
   - '7.2'
   - '7.3'
-addons:
-  code_climate:
-    repo_token:
-      secure: "eGeq4Up/4JoBg+k3XIJCMVj573AIlhoOGLAsz0Cy4JBlxAVdpI4/hhcTRrrWYTjO9q0u2AhkNm3i7SGRqoXUN7+LNK5UtdvyDrXC553l5HVQy5TaELNyYe7jVNeLND2uPZ/IKIywvrMRrVlMENkYRwtzjv0nPjpvpTm3Y7uP8HqYXpqTmMqRVDrXXoJCxTj3hFP39fg7QhIdVzVAMGaSUMyV3dI9zBonkyj4TUBQF3VJYm416IdW7CEEspxzzvQg0jgSEB+U2AboMsjEncZZwhRB1SZXB3uu9qQKTLllKfvo+jVHADiWwO76byRy+M67STXxPZF6ySyVa7V80Yz2QShaHtj2mbu7SqtheAJATSSi9yDMigYiQHwHvU4l/O6Cus2ldo+JWJE1TYBZt2tYPYPzUhoWjb7YmldZ1SWBfeIGlH1sKShs4thN0M7CgRoEpjmxK2QmKfZedjek+KLk6tMKkbwJZJvE7jbVEVgP9HZrw8mh/qWCERNt1vwYukz3MTQNJZPf4nFstiFzEp6JHB5aRpdoxW1wUbXCwyRL5RnCeiXLoAOaWxL9cVHKQtRJFM7BJ31qVuDNvd0KZSVoGS8Dr7IZIe12L+o5kDqoDWL3HbUc9/fYbEv+758gog7V8holV5XfMtWxl5X/CR7hoRvWEhcGArhXbE9tT+iCw7o="
-
+env:
+  global:
+    - CC_TEST_REPORTER_ID=6c93a972033b86464ae4d510468f04e4b3bda78f8184780b8af0b6d6d7aa8600
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script:
   - composer install
   - composer require symfony/phpunit-bridge:3.4.42
@@ -15,9 +17,9 @@ script:
   - composer require symfony/security-core:3.4.42
   - composer require symfony/console:3.4.42
   - composer require codeclimate/php-test-reporter
-  - vendor/bin/phpunit --coverage-clover=coverage.xml
+  - vendor/bin/phpunit --coverage-clover=clover.xml
 after_script:
-  - vendor/bin/test-reporter
+  - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
 after_success:
   # Submit coverage report to https://codecov.io
   - bash <(curl -s https://codecov.io/bash)

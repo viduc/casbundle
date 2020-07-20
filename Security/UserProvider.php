@@ -5,16 +5,13 @@ namespace Viduc\CasBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Viduc\CasBundle\Exception\ETQ_NonAutoriseException;
 use Viduc\CasBundle\Exception\ETQ_UtilisateurNonTrouveException;
-
 use Symfony\Component\Security\Core\Security;
 
-class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
+class UserProvider implements UserProviderInterface
 {
     private $session;
     private $security;

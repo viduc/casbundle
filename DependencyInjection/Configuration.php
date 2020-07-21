@@ -20,10 +20,12 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('Viduc_cas');
         //fix deprecated call
-        if(Kernel::VERSION > 4.2)
+        if(Kernel::VERSION > 4.2) {
             $rootNode = $treeBuilder->getRootNode();
-        else
+        }
+        else {
             $rootNode = $treeBuilder->root('cas');
+        }
         $rootNode
             ->children()
                 ->scalarNode('host')

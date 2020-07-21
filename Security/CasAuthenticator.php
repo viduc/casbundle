@@ -1,10 +1,7 @@
 <?php
-
-
 namespace Viduc\CasBundle\Security;
 
-
-use phpCAS;
+use \phpcas;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -57,18 +54,18 @@ class CasAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        phpCAS::setDebug();
-        phpCAS::setVerbose(true);
-        if (!phpCAS::isInitialized()) {
-            phpCAS::client(
+        \phpCAS::setDebug();
+        \phpCAS::setVerbose(true);
+        if (!\phpCAS::isInitialized()) {
+            \phpCAS::client(
                 $this->casVersion,
                 $this->casHost,
                 $this->casPort,
                 $this->casUri
             );
         }
-        phpCAS::setNoCasServerValidation();
-        phpCAS::forceAuthentication();
+        \phpCAS::setNoCasServerValidation();
+        \phpCAS::forceAuthentication();
 
         return array_merge(
             ['username' => phpCAS::getUser()],
@@ -110,8 +107,7 @@ class CasAuthenticator extends AbstractGuardAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        /*$this->session->getFlashBag()->add('notice', $this->translator->trans('message.compte_non_cree'));
-        return new RedirectResponse($this->router->generate('simsu_general_notice'));*/
+
     }
 
     /**

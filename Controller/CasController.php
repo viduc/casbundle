@@ -3,7 +3,6 @@
 namespace Viduc\CasBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Viduc\CasBundle\Security\CasUser;
 
@@ -20,14 +19,13 @@ class CasController extends AbstractController
         $user2->setRoles(['ROLE_USER']);
         $users[] = $user1;
         $users[] = $user2;
-        $session = $session;
         $session->set('enTantQue.users', $users);
     }
 
-    public function index(Request $request)
+    public function index()
     {
         return $this->render('@Cas/index.html.twig', [
-            'controller_name' => 'toto',
+            'controller_name' => 'cas',
         ]);
     }
 }

@@ -1,15 +1,17 @@
 <?php
-
 namespace Viduc\CasBundle\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Viduc\CasBundle\Exception\ETQ_NonAutoriseException;
-use Viduc\CasBundle\Exception\ETQ_UtilisateurNonTrouveException;
+use Viduc\CasBundle\Exception\eTqNonAutoriseException;
+use Viduc\CasBundle\Exception\eTqUtilisateurNonTrouveException;
 use Symfony\Component\Security\Core\Security;
+
+define("SECONNECTER", 'enTantQue.seConnecter');
+define("SECONNECTER_USEROBJECT", 'enTantQue.seConnecterUserObject');
+define("SECONNECTER_REFERENT", 'enTantQue.seConnecterReferent');
 
 class UserProvider implements UserProviderInterface
 {
@@ -31,9 +33,9 @@ class UserProvider implements UserProviderInterface
      * If you're not using these features, you do not need to implement
      * this method.
      *
+     * @param $username
      * @return UserInterface
      *
-     * @throws UsernameNotFoundException if the user is not found
      */
     public function loadUserByUsername($username)
     {
@@ -59,13 +61,15 @@ class UserProvider implements UserProviderInterface
      * If your firewall is "stateless: true" (for a pure API), this
      * method is not called.
      *
+     * @param UserInterface $user
      * @return UserInterface
-     * @throws \Exception
      */
     public function refreshUser(UserInterface $user)
     {
         if (!$user instanceof CasUser) {
-            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
+            throw new UnsupportedUserException(
+                sprintf('Invalid user class "%s".', get_class($user))
+            );
         }
 
         return $user;
@@ -73,75 +77,70 @@ class UserProvider implements UserProviderInterface
 
     /**
      * Tells Symfony to use this provider for this User class.
+     * @param $class
+     * @return bool
      */
-    public function supportsClass($class)
+    public function supportsClass($class) : bool
     {
         return CasUser::class === $class;
     }
 
-    /**
-     * Upgrades the encoded password of a user, typically for using a better hash algorithm.
-     */
-    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
-    {
-        // TODO: when encoded passwords are in use, this method should:
-        // 1. persist the new password in the user storage
-        // 2. update the $user object with $user->setPassword($newEncodedPassword);
-    }
 
     /**
      * Méthode pour se connecter en tant qu'autre utilisateur
-     * @return mixed|UserInterface|UgaUser
+     * @return mixed|UserInterface|CasUser
      * @test testConnecterEnTantQue()
      */
     public function connecterEnTantQue()
     {
         $this->estAutoriseAseConnecterEnTantQue();
+
         return $this->chargerUtilisateurCible();
     }
 
     /**
      * Vérifie si l'utilisateur qui utilise la fonctionnalité enTantQue est
      * autorisé à le faire
-     * @return bool| ETQ_NonAutoriseException
+     * @return bool| eTqNonAutoriseException
      * @test testEstAutoriseAseConnecterEnTantQue
      */
     public function estAutoriseAseConnecterEnTantQue()
     {
-        if (in_array('ROLE_ENTANTQUE', $this->security->getUser()->getRoles())) {
+        if ($this->security->getUser() !== null &&
+            in_array('ROLE_ENTANTQUE', $this->security->getUser()->getRoles())) {
             return true;
         }
         $message = 'Vous n\'êtes pas autorisé à utiliser cette fonctionnalité';
-        throw new ETQ_NonAutoriseException($message);
+        throw new eTqNonAutoriseException($message);
     }
 
     /**
      * Renvoie l'objet utilisateur ciblé
-     * @return mixed|UgaUser|ETQ_UtilisateurNonTrouveException
+     * @return mixed|CasUser|eTqUtilisateurNonTrouveException
      * @test testChargerUtilisateurCible()
      * @test testChargerUtilisateurCibleException
      */
     public function chargerUtilisateurCible()
     {
-        if (!$this->session->has('enTantQue.seConnecter') ||
-            $this->session->get('enTantQue.seConnecter') === null) {
+        if (!$this->session->has(SECONNECTER) ||
+            $this->session->get(SECONNECTER) === null) {
             $message = 'Le login de l\'utilisateur à s\'approprier n\'est';
             $message .= ' pas présent en session';
-            throw new ETQ_UtilisateurNonTrouveException($message);
+            throw new eTqUtilisateurNonTrouveException($message);
         }
-        if ($this->session->has('enTantQue.seConnecterUserObject') &&
-            $this->session->get('enTantQue.seConnecterUserObject') !== null) {
-            $user = $this->session->get('enTantQue.seConnecterUserObject');
-        } else {
-            $user = $this->chargerUtilisateurParSonLogin(
-                $this->session->get('enTantQue.seConnecter')
-            );
+        $user = $this->chargerUtilisateurParSonLogin(
+            $this->session->get(SECONNECTER)
+        );
+        if ($this->session->has(SECONNECTER_USEROBJECT) &&
+            $this->session->get(SECONNECTER_USEROBJECT) !== null) {
+            $user = $this->session->get(SECONNECTER_USEROBJECT);
         }
         if (!$user instanceof UserInterface) {
-            $message = 'L\'utilisateur cible n\'a pas pu être chargé correctement';
-            throw new ETQ_UtilisateurNonTrouveException($message);
+            $message = 'L\'utilisateur cible n\'a pas pu être chargé';
+            $message .= ' correctement';
+            throw new eTqUtilisateurNonTrouveException($message);
         }
-        $this->session->set('enTantQue.seConnecterUserObject', $user);
+        $this->session->set(SECONNECTER_USEROBJECT, $user);
 
         return $user;
     }
@@ -151,14 +150,14 @@ class UserProvider implements UserProviderInterface
      * Méthode générique, doit être surchargée par le provider de l'application
      * Doit renvoyer un objet de type UserInterface
      * @param $username
-     * @return UserInterface
+     * @return UserInterface|string
      * @test testChargerUtilisateurParSonLogin()
      */
     public function chargerUtilisateurParSonLogin($username)
     {
         if ($username === 'testphpunit') {
             $message = 'L\'utilisateur n\'a pas été trouvé';
-            throw new ETQ_UtilisateurNonTrouveException($message);
+            throw new eTqUtilisateurNonTrouveException($message);
         }
         if ($username === 'testphpunitnonobjectuser') {
             return 'noobjectuser';
@@ -175,15 +174,16 @@ class UserProvider implements UserProviderInterface
      * en tant que et qui fait l'action) en session
      * @param string $username
      */
-    public function enregistrerLutilisateurReferent($username)
+    public function enregistrerLutilisateurReferent($username) : void
     {
-        if (!$this->session->has('enTantQue.seConnecterReferent') ||
-            $this->session->get('enTantQue.seConnecterReferent') === null) {
+        if (!$this->session->has(SECONNECTER_REFERENT) ||
+            $this->session->get(SECONNECTER_REFERENT) === null) {
             if ($username === null || $username === '') {
-                $message = 'Vous n\'êtes pas autorisé à utiliser cette fonctionnalité';
-                throw new ETQ_NonAutoriseException($message);
+                $message = 'Vous n\'êtes pas autorisé à utiliser cette';
+                $message .= ' fonctionnalité';
+                throw new eTqNonAutoriseException($message);
             }
-            $this->session->set('enTantQue.seConnecterReferent', $username);
+            $this->session->set(SECONNECTER_REFERENT, $username);
         }
     }
 
@@ -191,11 +191,11 @@ class UserProvider implements UserProviderInterface
      * Vide la session des variables enTantQue
      * @test testRestaurerUtilisateurReferent()
      */
-    public function restaurerUtilisateurReferent()
+    public function restaurerUtilisateurReferent() : void
     {
-        $this->session->remove('enTantQue.seConnecter');
-        $this->session->remove('enTantQue.seConnecterReferent');
-        $this->session->remove('enTantQue.seConnecterUserObject');
+        $this->session->remove(SECONNECTER);
+        $this->session->remove(SECONNECTER_REFERENT);
+        $this->session->remove(SECONNECTER_USEROBJECT);
         $this->session->remove('enTantQue.restaurer');
     }
 }

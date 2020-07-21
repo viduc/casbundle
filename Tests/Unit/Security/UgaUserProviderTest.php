@@ -4,8 +4,8 @@ namespace Viduc\CasBundle\Tests\Unit\Security;
 
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Viduc\CasBundle\Exception\ETQ_NonAutoriseException;
-use Viduc\CasBundle\Exception\ETQ_UtilisateurNonTrouveException;
+use Viduc\CasBundle\Exception\eTq_NonAutoriseException;
+use Viduc\CasBundle\Exception\eTq_UtilisateurNonTrouveException;
 use Viduc\CasBundle\Security\CasUser;
 use Viduc\CasBundle\Security\UserProvider;
 use PHPUnit\Framework\TestCase;
@@ -65,9 +65,9 @@ class UgaUserProviderTest extends TestCase
         /* test sans le role autorisé */
         try {
             $this->provider->estAutoriseAseConnecterEnTantQue();
-        } catch (ETQ_NonAutoriseException $exception) {
+        } catch (eTq_NonAutoriseException $exception) {
             $this->assertInstanceOf(
-                ETQ_NonAutoriseException::class,
+                eTq_NonAutoriseException::class,
                 $exception
             );
         }
@@ -98,9 +98,9 @@ class UgaUserProviderTest extends TestCase
         /* test avec le login non présent dans la session */
         try {
             $this->provider->chargerUtilisateurCible();
-        } catch (ETQ_UtilisateurNonTrouveException $exception) {
+        } catch (eTq_UtilisateurNonTrouveException $exception) {
             $this->assertInstanceOf(
-                ETQ_UtilisateurNonTrouveException::class,
+                eTq_UtilisateurNonTrouveException::class,
                 $exception
             );
             $message = 'Le login de l\'utilisateur à s\'approprier n\'est';
@@ -115,9 +115,9 @@ class UgaUserProviderTest extends TestCase
         $this->session->set('enTantQue.seConnecter', 'testphpunit');
         try {
             $this->provider->chargerUtilisateurCible();
-        } catch (ETQ_UtilisateurNonTrouveException $exception) {
+        } catch (eTq_UtilisateurNonTrouveException $exception) {
             $this->assertInstanceOf(
-                ETQ_UtilisateurNonTrouveException::class,
+                eTq_UtilisateurNonTrouveException::class,
                 $exception
             );
             $message = 'L\'utilisateur n\'a pas été trouvé';
@@ -134,9 +134,9 @@ class UgaUserProviderTest extends TestCase
         $this->session->set('enTantQue.seConnecter', 'testphpunitnonobjectuser');
         try {
             $this->provider->chargerUtilisateurCible();
-        } catch (ETQ_UtilisateurNonTrouveException $exception) {
+        } catch (eTq_UtilisateurNonTrouveException $exception) {
             $this->assertInstanceOf(
-                ETQ_UtilisateurNonTrouveException::class,
+                eTq_UtilisateurNonTrouveException::class,
                 $exception
             );
             $message = 'L\'utilisateur cible n\'a pas pu être chargé correctement';
@@ -152,9 +152,9 @@ class UgaUserProviderTest extends TestCase
         /* test avec login non connu */
         try {
             $this->provider->chargerUtilisateurParSonLogin('testphpunit');
-        } catch (ETQ_UtilisateurNonTrouveException $exception) {
+        } catch (eTq_UtilisateurNonTrouveException $exception) {
             $this->assertInstanceOf(
-                ETQ_UtilisateurNonTrouveException::class,
+                eTq_UtilisateurNonTrouveException::class,
                 $exception
             );
             $message = 'L\'utilisateur n\'a pas été trouvé';
@@ -182,9 +182,9 @@ class UgaUserProviderTest extends TestCase
     {
         try {
             $this->assertNull($this->provider->enregistrerLutilisateurReferent(''));
-        } catch (ETQ_NonAutoriseException $exception) {
+        } catch (eTq_NonAutoriseException $exception) {
             $this->assertInstanceOf(
-                ETQ_NonAutoriseException::class,
+                eTq_NonAutoriseException::class,
                 $exception
             );
             $message = 'Vous n\'êtes pas autorisé à utiliser cette fonctionnalité';

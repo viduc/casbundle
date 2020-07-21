@@ -28,6 +28,9 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">Controller</directory>
+            <exclude>
+                <file>Controller/CasController.php</file>
+            </exclude>
         </whitelist>
     </filter>
 

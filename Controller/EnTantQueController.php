@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/* @codeCoverageIgnoreStart */
 define("USERS", 'enTantQue.users');
+/* @codeCoverageIgnoreEnd */
 
 class EnTantQueController extends AbstractController
 {
@@ -90,12 +92,8 @@ class EnTantQueController extends AbstractController
     {
         $this->session->set('enTantQue.restaurer', true);
 
-        /**
-         * @codeCoverageIgnoreStart
-         */
+        /* @codeCoverageIgnoreStart */
         return $this->redirect('cas');
-        /**
-         * @codeCoverageIgnoreEnd
-         */
+        /* @codeCoverageIgnoreEnd */
     }
 }

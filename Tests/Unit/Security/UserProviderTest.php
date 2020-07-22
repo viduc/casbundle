@@ -4,15 +4,15 @@ namespace Viduc\CasBundle\Tests\Unit\Security;
 
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Viduc\CasBundle\Exception\eTq_NonAutoriseException;
-use Viduc\CasBundle\Exception\eTq_UtilisateurNonTrouveException;
+use Viduc\CasBundle\Exception\eTqNonAutoriseException;
+use Viduc\CasBundle\Exception\eTqUtilisateurNonTrouveException;
 use Viduc\CasBundle\Security\CasUser;
 use Viduc\CasBundle\Security\UserProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-class UgaUserProviderTest extends TestCase
+class UserProviderTest extends TestCase
 {
     protected $session;
     protected $security;
@@ -43,7 +43,7 @@ class UgaUserProviderTest extends TestCase
         /* test si la variable de session 'enTantQue.seConnecter' est existante
          et non null, utilisateur autorisé à se connecter */
         $this->session->set('enTantQue.seConnecter', 'test');
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             UserInterface::class,
             $this->provider->connecterEnTantQue()
         );
@@ -53,21 +53,23 @@ class UgaUserProviderTest extends TestCase
     public function testEstAutoriseAseConnecterEnTantQue()
     {
         $this->security->method('getUser')->will(
-            $this->onConsecutiveCalls(
+            self::onConsecutiveCalls(
                 $this->creerUser('test',['ROLE_ENTANTQUE']),
+                $this->creerUser('test',['ROLE_ENTANTQUE']),
+                $this->creerUser('test',['ROLE_USER']),
                 $this->creerUser('test',['ROLE_USER'])
             )
         );
         /* test avec le rôle autorisé */
-        $this->assertTrue(
+        self::assertTrue(
             $this->provider->estAutoriseAseConnecterEnTantQue()
         );
         /* test sans le role autorisé */
         try {
             $this->provider->estAutoriseAseConnecterEnTantQue();
-        } catch (eTq_NonAutoriseException $exception) {
-            $this->assertInstanceOf(
-                eTq_NonAutoriseException::class,
+        } catch (eTqNonAutoriseException $exception) {
+            self::assertInstanceOf(
+                eTqNonAutoriseException::class,
                 $exception
             );
         }
@@ -77,7 +79,7 @@ class UgaUserProviderTest extends TestCase
     {
         /* test avec login présent et object user non présent, login connu */
         $this->session->set('enTantQue.seConnecter', 'test');
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             CasUser::class,
             $this->provider->chargerUtilisateurCible()
         );
@@ -87,7 +89,7 @@ class UgaUserProviderTest extends TestCase
         $user = new CasUser();
         $user->setUsername('test');
         $this->session->set('enTantQue.seConnecterUserObject', $user);
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             UserInterface::class,
             $this->provider->chargerUtilisateurCible()
         );
@@ -98,14 +100,14 @@ class UgaUserProviderTest extends TestCase
         /* test avec le login non présent dans la session */
         try {
             $this->provider->chargerUtilisateurCible();
-        } catch (eTq_UtilisateurNonTrouveException $exception) {
+        } catch (eTqUtilisateurNonTrouveException $exception) {
             $this->assertInstanceOf(
-                eTq_UtilisateurNonTrouveException::class,
+                eTqUtilisateurNonTrouveException::class,
                 $exception
             );
             $message = 'Le login de l\'utilisateur à s\'approprier n\'est';
             $message .= ' pas présent en session';
-            $this->assertEquals(
+            self::assertEquals(
                 $message,
                 $exception->getMessage()
             );
@@ -115,13 +117,13 @@ class UgaUserProviderTest extends TestCase
         $this->session->set('enTantQue.seConnecter', 'testphpunit');
         try {
             $this->provider->chargerUtilisateurCible();
-        } catch (eTq_UtilisateurNonTrouveException $exception) {
-            $this->assertInstanceOf(
-                eTq_UtilisateurNonTrouveException::class,
+        } catch (eTqUtilisateurNonTrouveException $exception) {
+            self::assertInstanceOf(
+                eTqUtilisateurNonTrouveException::class,
                 $exception
             );
             $message = 'L\'utilisateur n\'a pas été trouvé';
-            $this->assertEquals(
+            self::assertEquals(
                 $message,
                 $exception->getMessage()
             );
@@ -134,13 +136,13 @@ class UgaUserProviderTest extends TestCase
         $this->session->set('enTantQue.seConnecter', 'testphpunitnonobjectuser');
         try {
             $this->provider->chargerUtilisateurCible();
-        } catch (eTq_UtilisateurNonTrouveException $exception) {
-            $this->assertInstanceOf(
-                eTq_UtilisateurNonTrouveException::class,
+        } catch (eTqUtilisateurNonTrouveException $exception) {
+            self::assertInstanceOf(
+                eTqUtilisateurNonTrouveException::class,
                 $exception
             );
             $message = 'L\'utilisateur cible n\'a pas pu être chargé correctement';
-            $this->assertEquals(
+            self::assertEquals(
                 $message,
                 $exception->getMessage()
             );
@@ -152,13 +154,13 @@ class UgaUserProviderTest extends TestCase
         /* test avec login non connu */
         try {
             $this->provider->chargerUtilisateurParSonLogin('testphpunit');
-        } catch (eTq_UtilisateurNonTrouveException $exception) {
+        } catch (eTqUtilisateurNonTrouveException $exception) {
             $this->assertInstanceOf(
-                eTq_UtilisateurNonTrouveException::class,
+                eTqUtilisateurNonTrouveException::class,
                 $exception
             );
             $message = 'L\'utilisateur n\'a pas été trouvé';
-            $this->assertEquals(
+            self::assertEquals(
                 $message,
                 $exception->getMessage()
             );
@@ -166,13 +168,13 @@ class UgaUserProviderTest extends TestCase
 
         /* test avec renvoi d'un string au lieu d'un User
         */
-        $this->assertNotInstanceOf(
+        self::assertNotInstanceOf(
             CasUser::class,
             $this->provider->chargerUtilisateurParSonLogin('testphpunitnonobjectuser')
         );
 
         /* test avec un user retourné */
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             CasUser::class,
             $this->provider->chargerUtilisateurParSonLogin('test')
         );
@@ -181,34 +183,34 @@ class UgaUserProviderTest extends TestCase
     public function testEnregistrerLutilisateurReferent()
     {
         try {
-            $this->assertNull($this->provider->enregistrerLutilisateurReferent(''));
-        } catch (eTq_NonAutoriseException $exception) {
-            $this->assertInstanceOf(
-                eTq_NonAutoriseException::class,
+            self::assertNull($this->provider->enregistrerLutilisateurReferent(''));
+        } catch (eTqNonAutoriseException $exception) {
+            self::assertInstanceOf(
+                eTqNonAutoriseException::class,
                 $exception
             );
             $message = 'Vous n\'êtes pas autorisé à utiliser cette fonctionnalité';
-            $this->assertEquals(
+            self::assertEquals(
                 $message,
                 $exception->getMessage()
             );
         }
-        $this->assertNull($this->provider->enregistrerLutilisateurReferent('test'));
+        self::assertNull($this->provider->enregistrerLutilisateurReferent('test'));
     }
 
     public function testRestaurerUtilisateurReferent()
     {
-        $this->assertNull($this->provider->restaurerUtilisateurReferent());
-        $this->assertFalse(
+        self::assertNull($this->provider->restaurerUtilisateurReferent());
+        self::assertFalse(
             $this->session->has('enTantQue.seConnecter')
         );
-        $this->assertFalse(
+        self::assertFalse(
             $this->session->has('enTantQue.seConnecterReferent')
         );
-        $this->assertFalse(
+        self::assertFalse(
             $this->session->has('enTantQue.seConnecterUserObject')
         );
-        $this->assertFalse(
+        self::assertFalse(
             $this->session->has('enTantQue.restaurer')
         );
     }

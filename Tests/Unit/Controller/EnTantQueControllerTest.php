@@ -72,4 +72,12 @@ class EnTantQueControllerTest extends TestCase
             $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
         );
     }
+
+    public function testRestaurerEnTantQue()
+    {
+        $this->enTantQue->restaurerEnTantQue();
+        self::assertTrue(
+            $this->session->get('enTantQue.restaurer')
+        );
+    }
 }

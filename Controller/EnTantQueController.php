@@ -4,7 +4,9 @@ namespace Viduc\CasBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -19,6 +21,11 @@ class EnTantQueController extends AbstractController
         $this->session = $session;
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse|Response
+     * @codeCoverageIgnore
+     */
     public function connecterEnTantQue(Request $request)
     {
         $form = $this->createFormBuilder()
@@ -83,6 +90,12 @@ class EnTantQueController extends AbstractController
     {
         $this->session->set('enTantQue.restaurer', true);
 
+        /**
+         * @codeCoverageIgnoreStart
+         */
         return $this->redirect('cas');
+        /**
+         * @codeCoverageIgnoreEnd
+         */
     }
 }

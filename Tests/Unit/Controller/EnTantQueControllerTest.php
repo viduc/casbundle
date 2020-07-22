@@ -30,12 +30,7 @@ class EnTantQueControllerTest extends TestCase
 
     public function testGenererLeTableauDesUtilisateurs()
     {
-        $this->assertCount(
-            0,
-            $this->enTantQue->genererLeTableauDesUtilisateurs()
-        );
-        $this->session->set('enTantQue.users', null);
-        $this->assertCount(
+        self::assertCount(
             0,
             $this->enTantQue->genererLeTableauDesUtilisateurs()
         );
@@ -43,9 +38,38 @@ class EnTantQueControllerTest extends TestCase
             'enTantQue.users',
             [$this->creerUser('test', ['ROLE_USER'])]
         );
-        $this->assertCount(
+        self::assertCount(
             1,
             $this->enTantQue->genererLeTableauDesUtilisateurs()
+        );
+    }
+
+    public function testRecupererLeTableauDesUtilisateursEnSession()
+    {
+        self::assertEmpty(
+            $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
+        );
+        $this->session->set(
+            'enTantQue.users',
+            [$this->creerUser('test', ['ROLE_USER'])]
+        );
+        self::assertIsArray(
+            $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
+        );
+        self::assertCount(
+            1,
+            $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
+        );
+        $this->session->set(
+            'enTantQue.users',
+            [$this->creerUser('test', ['ROLE_USER']), 'test']
+        );
+        self::assertIsArray(
+            $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
+        );
+        self::assertCount(
+            1,
+            $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
         );
     }
 }

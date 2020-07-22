@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+define("USERS", 'enTantQue.users');
+
 class EnTantQueController extends AbstractController
 {
     private $session;
@@ -47,18 +49,36 @@ class EnTantQueController extends AbstractController
     public function genererLeTableauDesUtilisateurs()
     {
         $choices = [];
-        if ($this->session->has('enTantQue.users')
-            && is_array($this->session->get('enTantQue.users'))) {
-            foreach ($this->session->get('enTantQue.users') as $user) {
-                if ($user instanceof UserInterface) {
-                    $username = $user->getUsername();
-                    $choices[$username] = $username;
-                }
-            }
+        foreach ($this->recupererLeTableauDesUtilisateursEnSession() as $user) {
+            $username = $user->getUsername();
+            $choices[$username] = $username;
         }
 
         return $choices;
     }
+
+    /**
+     * Récupère le tableau des utilisateurs en session qui a été généré pour la
+     * fonctionnalité enTantQue
+     * @return array
+     * @test testRecupererLeTableauDesUtilisateursEnSession()
+     */
+    public function recupererLeTableauDesUtilisateursEnSession() : array
+    {
+        if ($this->session->has(USERS)
+            && is_array($this->session->get(USERS))) {
+            return array_filter(
+                $this->session->get(USERS),
+                static function ($objet)
+                {
+                    return $objet instanceof UserInterface;
+                }
+            );
+        }
+
+        return [];
+    }
+
 
     public function restaurerEnTantQue()
     {

@@ -28,8 +28,11 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">Controller</directory>
+            <directory suffix=".php">Security</directory>
             <exclude>
                 <file>Controller/CasController.php</file>
+                <file>Security/CasUser.php</file>
+                <file>Security/CasAuthenticator.php</file>
             </exclude>
         </whitelist>
     </filter>

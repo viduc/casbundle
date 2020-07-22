@@ -69,7 +69,7 @@ class EnTantQueController extends AbstractController
             && is_array($this->session->get(USERS))) {
             return array_filter(
                 $this->session->get(USERS),
-                static function ($objet){
+                static function ($objet) {
                     return $objet instanceof UserInterface;
                 }
             );

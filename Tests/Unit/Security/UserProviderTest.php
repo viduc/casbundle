@@ -260,4 +260,12 @@ class UserProviderTest extends TestCase
             $this->session->has('enTantQue.restaurer')
         );
     }
+
+    public function testDefineVariable()
+    {
+        self::assertEquals(
+            'enTantQue.seConnecter',
+            $this->provider->getSeConnecter()
+        );
+    }
 }

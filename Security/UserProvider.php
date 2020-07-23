@@ -26,6 +26,11 @@ class UserProvider implements UserProviderInterface
         $this->security = $security;
     }
 
+    public function getSeConnecter()
+    {
+        return SECONNECTER;
+    }
+
     /**
      * Symfony calls this method if you use features like switch_user
      * or remember_me.

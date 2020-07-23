@@ -28,7 +28,7 @@ class UserProvider implements UserProviderInterface
 
     public function getSeConnecter()
     {
-        return SECONNECTER;
+        return defined('SECONNECTER');
     }
 
     /**

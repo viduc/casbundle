@@ -263,9 +263,6 @@ class UserProviderTest extends TestCase
 
     public function testDefineVariable()
     {
-        self::assertEquals(
-            'enTantQue.seConnecter',
-            $this->provider->getSeConnecter()
-        );
+        self::assertTrue($this->provider->getSeConnecter());
     }
 }

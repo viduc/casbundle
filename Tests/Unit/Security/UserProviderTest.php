@@ -2,7 +2,9 @@
 
 namespace Viduc\CasBundle\Tests\Unit\Security;
 
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Viduc\CasBundle\Exception\eTqNonAutoriseException;
 use Viduc\CasBundle\Exception\eTqUtilisateurNonTrouveException;
@@ -32,6 +34,50 @@ class UserProviderTest extends TestCase
         $user->setRoles($roles);
 
         return $user;
+    }
+
+    public function testLoadUserByUsername()
+    {
+        $this->session->set('enTantQue.restaurer', true);
+        self::assertInstanceOf(
+            UserInterface::class,
+            $this->provider->loadUserByUsername('test')
+        );
+        $this->session->set('enTantQue.seConnecter', 'test');
+        $this->security->method('getUser')->willReturn(
+            $this->creerUser('test',['ROLE_ENTANTQUE'])
+        );
+        self::assertInstanceOf(
+            UserInterface::class,
+            $this->provider->loadUserByUsername('test')
+        );
+    }
+
+    public function testRefreshUser()
+    {
+        $user = $this->creerUser('test', ['ROLE_USER']);
+        self::assertInstanceOf(
+            UserInterface::class,
+            $this->provider->refreshUser($user)
+        );
+        try {
+            $user = new User('test', 'test');
+            $this->provider->refreshUser($user);
+        } catch (UnsupportedUserException $exception) {
+            self::assertInstanceOf(
+                UnsupportedUserException::class,
+                $exception
+            );
+        }
+    }
+
+    public function testSupportsClass()
+    {
+        $user = new User('test', 'test');
+        self::assertFalse($this->provider->supportsClass($user));
+        $user = $this->creerUser('test', ['ROLE_USER']);
+        self::assertTrue($this->provider->supportsClass($user));
+
     }
 
     public function testConnecterEnTantQue()

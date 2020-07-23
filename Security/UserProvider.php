@@ -35,14 +35,14 @@ class UserProvider implements UserProviderInterface
      *
      * @param $username
      * @return UserInterface
-     *
+     * @test testLoadUserByUsername()
      */
     public function loadUserByUsername($username)
     {
         if ($this->session->has('enTantQue.restaurer')) {
             $this->restaurerUtilisateurReferent();
         }
-        if ($this->session->has('enTantQue.seConnecter')) {
+        if ($this->session->has(SECONNECTER)) {
             $this->enregistrerLutilisateurReferent($username);
             return $this->connecterEnTantQue();
         }
@@ -82,7 +82,7 @@ class UserProvider implements UserProviderInterface
      */
     public function supportsClass($class) : bool
     {
-        return CasUser::class === $class;
+        return CasUser::class === get_class($class);
     }
 
 

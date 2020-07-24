@@ -8,9 +8,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Viduc\CasBundle\Exception\eTqNonAutoriseException;
 use Viduc\CasBundle\Exception\eTqUtilisateurNonTrouveException;
 use Symfony\Component\Security\Core\Security;
-/**
- * @codeCoverageIgnore
- */
+
 define("SECONNECTER", 'enTantQue.seConnecter');
 define("SECONNECTER_USEROBJECT", 'enTantQue.seConnecterUserObject');
 define("SECONNECTER_REFERENT", 'enTantQue.seConnecterReferent');

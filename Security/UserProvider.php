@@ -82,7 +82,7 @@ class UserProvider implements UserProviderInterface
      */
     public function supportsClass($class) : bool
     {
-        return CasUser::class === get_class($class);
+        return CasUser::class === $class;
     }
 
 

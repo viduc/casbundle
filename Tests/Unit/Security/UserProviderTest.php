@@ -73,10 +73,8 @@ class UserProviderTest extends TestCase
 
     public function testSupportsClass()
     {
-        $user = new User('test', 'test');
-        self::assertFalse($this->provider->supportsClass($user));
-        $user = $this->creerUser('test', ['ROLE_USER']);
-        self::assertTrue($this->provider->supportsClass($user));
+        self::assertFalse($this->provider->supportsClass('test'));
+        self::assertTrue($this->provider->supportsClass('Viduc\CasBundle\Security\CasUser'));
 
     }
 

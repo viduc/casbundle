@@ -9,3 +9,7 @@ enTantQue:
 enTantQueRestore:
     path: /en_tant_que_restore
     controller: Viduc\CasBundle\Controller\EnTantQueController::restaurerEnTantQue
+
+personnaIndex:
+    path: /persona
+    controller: Viduc\CasBundle\Controller\PersonaController::index

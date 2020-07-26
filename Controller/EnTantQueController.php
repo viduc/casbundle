@@ -10,9 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/* @codeCoverageIgnoreStart */
-define("USERS", 'enTantQue.users');
-/* @codeCoverageIgnoreEnd */
+define("USERS", 'enTantQue.users'); // @codeCoverageIgnore
 
 class EnTantQueController extends AbstractController
 {

@@ -9,9 +9,9 @@ use Viduc\CasBundle\Exception\eTqNonAutoriseException;
 use Viduc\CasBundle\Exception\eTqUtilisateurNonTrouveException;
 use Symfony\Component\Security\Core\Security;
 
-define("SECONNECTER", 'enTantQue.seConnecter');
-define("SECONNECTER_USEROBJECT", 'enTantQue.seConnecterUserObject');
-define("SECONNECTER_REFERENT", 'enTantQue.seConnecterReferent');
+define("SECONNECTER", 'enTantQue.seConnecter'); // @codeCoverageIgnore
+define("SECONNECTER_USEROBJECT", 'enTantQue.seConnecterUserObject'); // @codeCoverageIgnore
+define("SECONNECTER_REFERENT", 'enTantQue.seConnecterReferent'); // @codeCoverageIgnore
 
 class UserProvider implements UserProviderInterface
 {

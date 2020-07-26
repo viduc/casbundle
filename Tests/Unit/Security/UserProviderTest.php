@@ -145,7 +145,7 @@ class UserProviderTest extends TestCase
         try {
             $this->provider->chargerUtilisateurCible();
         } catch (eTqUtilisateurNonTrouveException $exception) {
-            $this->assertInstanceOf(
+            self::assertInstanceOf(
                 eTqUtilisateurNonTrouveException::class,
                 $exception
             );
@@ -199,7 +199,7 @@ class UserProviderTest extends TestCase
         try {
             $this->provider->chargerUtilisateurParSonLogin('testphpunit');
         } catch (eTqUtilisateurNonTrouveException $exception) {
-            $this->assertInstanceOf(
+            self::assertInstanceOf(
                 eTqUtilisateurNonTrouveException::class,
                 $exception
             );

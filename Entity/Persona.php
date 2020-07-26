@@ -50,7 +50,7 @@ class Persona
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $erequenceUsage;
+    private $frequenceUsage;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -76,6 +76,20 @@ class Persona
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;
+
+    /**
+     * @ORM\Column(name="roles", type="array")
+     */
+    private $roles = [];
+
+    /**
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
+
+    public function __construct() {
+        $this->isActive = true;
+    }
 
     public function getId(): ?int
     {
@@ -224,5 +238,20 @@ class Persona
         $this->photo = $photo;
 
         return $this;
+    }
+
+    public function getRoles() {
+        if (empty($this->roles)) {
+            return ['ROLE_USER'];
+        }
+        return $this->roles;
+    }
+
+    function addRole($role) {
+        $this->roles[] = $role;
+    }
+
+    function setIsActive($isActive) {
+        $this->isActive = $isActive;
     }
 }

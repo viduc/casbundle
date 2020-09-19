@@ -55,6 +55,11 @@ class Persona
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $metier;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $citation;
 
     /**
@@ -76,6 +81,11 @@ class Persona
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $urlPhoto;
 
     /**
      * @ORM\Column(name="roles", type="array")
@@ -180,6 +190,18 @@ class Persona
         return $this;
     }
 
+    public function getMetier(): ?string
+    {
+        return $this->metier;
+    }
+
+    public function setMetier(?string $metier): self
+    {
+        $this->metier = $metier;
+
+        return $this;
+    }
+
     public function getCitation(): ?string
     {
         return $this->citation;
@@ -236,6 +258,18 @@ class Persona
     public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getUrlPhoto(): ?string
+    {
+        return $this->urlPhoto;
+    }
+
+    public function setUrlPhoto(?string $urlPhoto): self
+    {
+        $this->urlPhoto = $urlPhoto;
 
         return $this;
     }

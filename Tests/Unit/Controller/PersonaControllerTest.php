@@ -17,10 +17,16 @@ class PersonaControllerTest extends TestCase
     {
         //$this->session = new Session(new MockArraySessionStorage());
         $this->kernel = $this->createMock(Kernel::class);
-        $this->ressource = './Tests/Unit/Ressources';
+        $dir = __DIR__;
+        $this->ressource = str_replace("Controller", 'Ressources', $dir);
+        //$this->ressource = '../Ressources';
         $this->kernel->method('getProjectDir')->willReturn($this->ressource);
         $this->persona = new PersonaController($this->kernel);
-        unlink($this->ressource.'/public/bundles/cas/personas/personas.json');
+        if (file_exists(
+            $this->ressource.'/public/file/personas.json'
+        )) {
+            unlink($this->ressource.'/public/file/personas.json');
+        }
     }
 
     public function testCreerLeFichierPersonaSiInexistant()
@@ -33,14 +39,14 @@ class PersonaControllerTest extends TestCase
     public function testRecupererLesPersonas()
     {
         fopen(
-            $this->ressource.'/public/bundles/cas/personas/personas.json',
+            $this->ressource.'/public/file/personas.json',
             'wb'
         );
 
         $this->assertSame(
             count($this->persona->recupererLesPersonas()), 0
         );
-        unlink($this->ressource.'/public/bundles/cas/personas/personas.json');
+        unlink($this->ressource.'/public/file/personas.json');
         $this->persona->creerLeFichierPersonaSiInexistant();
         $this->assertTrue(
             count($this->persona->recupererLesPersonas()) >= 2

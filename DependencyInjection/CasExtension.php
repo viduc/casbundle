@@ -17,7 +17,9 @@ class CasExtension extends Extension
     {
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
+            new FileLocator(__DIR__ . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR
+            . 'config')
         );
         $loader->load('services.yaml');
         $configuration = new Configuration();

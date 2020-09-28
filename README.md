@@ -13,8 +13,11 @@ AUTEUR
 
 STATUT
 ------
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/viduc/casbundle.svg?style=flat-square)](https://packagist.org/packages/viduc/casbundle)
+[![Software License](https://img.shields.io/badge/license-Apache%202-blue.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://api.travis-ci.com/viduc/casbundle.svg)](https://travis-ci.com/viduc/casbundle)
 [![Coverage](https://codecov.io/gh/viduc/casbundle/branch/master/graph/badge.svg)](https://codecov.io/gh/viduc/casbundle/)
+[![Total Downloads](https://img.shields.io/packagist/dt/viduc/casbundle.svg?style=flat-square)](https://packagist.org/packages/viduc/casbundle)
 
 LICENSE
 -------

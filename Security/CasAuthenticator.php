@@ -18,6 +18,7 @@ class CasAuthenticator extends AbstractGuardAuthenticator
     private $casHost;
     private $casPort;
     private $casUri;
+    private $failMessage;
 
     public function __construct(array $config)
     {
@@ -25,6 +26,7 @@ class CasAuthenticator extends AbstractGuardAuthenticator
         $this->casHost = $config['host'];
         $this->casPort = $config['port'];
         $this->casUri = $config['uri'];
+        $this->failMessage = "Aucun utilisateur trouvé";
     }
 
     /**
@@ -85,8 +87,11 @@ class CasAuthenticator extends AbstractGuardAuthenticator
         try {
             return $userProvider->loadUserByUsername($credentials['username']);
         }
-        catch (UsernameNotFoundException $e) {// TODO revoir ici comment on gère ce retour
-            throw new CustomUserMessageAuthenticationException($this->failMessage);
+        catch (UsernameNotFoundException $e) {
+            // TODO revoir ici comment on gère ce retour
+            throw new CustomUserMessageAuthenticationException(
+                $this->failMessage
+            );
         }
     }
 
@@ -105,16 +110,21 @@ class CasAuthenticator extends AbstractGuardAuthenticator
     /**
      * @inheritDoc
      */
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
-    {
+    public function onAuthenticationFailure(
+        Request $request,
+        AuthenticationException $exception
+    ) {
 
     }
 
     /**
      * @inheritDoc
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
-    {
+    public function onAuthenticationSuccess(
+        Request $request,
+        TokenInterface $token,
+        $providerKey
+    ) {
         return null;
     }
 

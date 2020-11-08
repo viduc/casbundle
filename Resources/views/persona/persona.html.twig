@@ -1,0 +1,123 @@
+<div class="popup" id="popup{{ persona.id }}">
+    <div class="popup-inner">
+        <div class="popup__photo">
+            <table>
+                <tr>
+                    <td style="width: 230px">
+                        <img src="{{ asset(
+                            'bundles/cas/images/personas/'
+                            ~ persona.urlPhoto
+                        ) }}" alt=""></td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 5px">
+                        <h3 class="progress-title">
+                            Aisance numérique
+                        </h3>
+                        <div class="progress-outer">
+                            <div class="progress">
+                                <div class="progress-bar
+                                    progress-bar-striped
+                                    progress-bar-danger"
+                                     style="width:{{ persona.aisanceNumerique }}%;">
+                                </div>
+                                <div class="progress-value">
+                                    <span>{{ persona.aisanceNumerique }}</span>%
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="progress-title">
+                            Expertise domaine
+                        </h3>
+                        <div class="progress-outer">
+                            <div class="progress">
+                                <div class="progress-bar
+                                                                progress-bar-striped
+                                                                progress-bar-danger" style="width:{{ persona.expertiseDomaine }}%;">
+                                </div>
+                                <div class="progress-value">
+                                    <span>{{ persona.expertiseDomaine }}</span>%
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="progress-title">
+                            Fréquence usage
+                        </h3>
+                        <div class="progress-outer">
+                            <div class="progress">
+                                <div class="progress-bar
+                                                            progress-bar-striped
+                                                            progress-bar-danger" style="width:{{ persona.frequenceUsage }}%;">
+                                </div>
+                                <div class="progress-value">
+                                    <span>{{ persona.frequenceUsage }}</span>%
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="popup__text">
+            <h2>{{ persona.prenom }} {{ persona.nom }}</h2>
+            <h5>{{ persona.age }} ans, {{ persona.metier }}</h5>
+            <blockquote>{{ persona.citation }}</blockquote>
+            <div class="persona_histoire">
+                {{ persona.histoire }}
+            </div>
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 50%">
+                        <h3>
+                            <img src="{{ asset(
+                                'bundles/cas/images/personas/cible.svg'
+                            ) }}" alt="cible" width="24px" height="24px">
+                            Buts clés</h3>
+                        {% set buts = persona.buts|split(',') %}
+                        <ul>
+                            {% for but in buts %}
+                                <li>{{ but }}</li>
+                            {% endfor %}
+                        </ul>
+
+                    </td>
+                    <td style="width: 50%">
+                        <h3>
+                            <img src="{{ asset(
+                                'bundles/cas/images/personas/personnalite.png'
+                            ) }}" alt="cible" width="24px" height="24px">
+                            Personalité</h3>
+                        {% set personnalites = persona.personnalite|split(',') %}
+                        <ul>
+                            {% for personnalite in personnalites %}
+                                <li>{{ personnalite }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            {% if app.session.get('enTantQue.seConnecter') is defined
+                and app.session.get('enTantQue.seConnecter')
+                and app.session.get('enTantQue.seConnecter') == persona.username
+            %}
+                <div class="alert alert-info">
+                    Vous êtes connecter en tant que :
+                    {{ app.session.get('enTantQue.seConnecter')}}
+                </div>
+                <div align="center">
+                    <a href="{{
+                    path('personaRestore')
+                    }}" class="btn" style="background-color: #B0413E">deconnecter</a>
+                </div>
+            {% else %}
+                <div align="center">
+                    <a href="{{
+                    path('personaSeConnecter',
+                        {'id': persona.id})
+                    }}" class="btn" style="background-color: #B0413E">connecter</a>
+                </div>
+            {% endif %}
+        </div>
+        <a class="popup__close" href="#">X</a>
+    </div>
+</div>

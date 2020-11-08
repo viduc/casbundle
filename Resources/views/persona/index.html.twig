@@ -44,7 +44,9 @@
             <svg class="header__log--icon" width="24" height="24" viewBox="0 0 24 24">
                 <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"></path>
             </svg>
-            <p class="header__log--text">Ajouter</p>
+            <p class="header__log--text" style="padding-top: 5px">
+                <a href="{{path('personaAjouter')}}" style="color: white;">Ajouter</a>
+            </p>
         </div>
     </div>
 
@@ -55,12 +57,19 @@
         <div class="about__text">
             <p class="about__text--content">
                 <div class="container">
+                {% if app.session.get('enTantQue.seConnecter') is defined
+                    and app.session.get('enTantQue.seConnecter')
+                %}
+                <div class="alert alert-info">
+                    Vous êtes connecter en tant que :
+                        {{ app.session.get('enTantQue.seConnecter')}}
+                </div>
+                {% endif %}
                     <div class="cards">
                         {% for persona in personas  %}
                             <a class="card" href="#popup{{ persona.id }}" >
                                 {% if persona.photo is not null %}
-                                    {% set url = 'bundles/cas/images/personas/'
-                                        ~ persona.urlPhoto %}
+                                    {% set url = persona.urlPhoto %}
                                 {% endif %}
                                 <span class="card-header" style="background-image: url({{ asset(url) }});">
                                     <span class="card-title">
@@ -81,8 +90,7 @@
                                             <tr>
                                                 <td style="width: 230px">
                                                     <img src="{{ asset(
-                                                        'bundles/cas/images/personas/'
-                                                        ~ persona.urlPhoto
+                                                        persona.urlPhoto
                                                     ) }}" alt=""></td>
                                             </tr>
                                             <tr>
@@ -136,13 +144,67 @@
                                     </div>
                                     <div class="popup__text">
                                         <h2>{{ persona.prenom }} {{ persona.nom }}</h2>
-                                        <h1>{{ persona.age }} ans</h1>
-                                        <p>{{ persona.citation }}</p>
+                                        <h5>{{ persona.age }} ans, {{ persona.metier }}</h5>
+                                        <blockquote>{{ persona.citation }}</blockquote>
+                                        <div class="persona_histoire">
+                                            {{ persona.histoire }}
+                                        </div>
+                                        <table style="width: 100%">
+                                            <tr>
+                                                <td style="width: 50%">
+                                                    <h3>
+                                                    <img src="{{ asset(
+                                                        'bundles/cas/images/personas/cible.svg'
+                                                    ) }}" alt="cible" width="24px" height="24px">
+                                                    Buts clés</h3>
+                                                    {% set buts = persona.buts|split(',') %}
+                                                    <ul>
+                                                        {% for but in buts %}
+                                                            <li>{{ but }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+
+                                                </td>
+                                                <td style="width: 50%">
+                                                    <h3>
+                                                        <img src="{{ asset(
+                                                            'bundles/cas/images/personas/personnalite.png'
+                                                        ) }}" alt="cible" width="24px" height="24px">
+                                                        Personalité</h3>
+                                                    {% set personnalites = persona.personnalite|split(',') %}
+                                                    <ul>
+                                                        {% for personnalite in personnalites %}
+                                                            <li>{{ personnalite }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        {% if app.session.get('enTantQue.seConnecter') is defined
+                                            and app.session.get('enTantQue.seConnecter')
+                                            and app.session.get('enTantQue.seConnecter') == persona.username
+                                        %}
+                                            <div class="alert alert-info">
+                                                Vous êtes connecter en tant que :
+                                                {{ app.session.get('enTantQue.seConnecter')}}
+                                            </div>
+                                            <div align="center">
+                                                <a href="{{
+                                                path('personaRestore')
+                                                }}" class="btn" style="background-color: #B0413E">deconnecter</a>
+                                            </div>
+                                        {% else %}
+                                            <div align="center">
+                                                <a href="{{
+                                                path('personaSeConnecter',
+                                                    {'id': persona.id})
+                                                }}" class="btn" style="background-color: #B0413E">connecter</a>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <a class="popup__close" href="#">X</a>
                                 </div>
                             </div>
-
                         {% endfor %}
                     </div>
                 </div>
@@ -160,5 +222,4 @@
             src="{{ asset('bundles/cas/js/jquery-1.12.4.min.js') }}" >
         </script>
     {% endblock %}
-    {{ dump(personas) }}
 {% endblock %}

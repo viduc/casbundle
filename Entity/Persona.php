@@ -2,99 +2,25 @@
 
 namespace Viduc\CasBundle\Entity;
 
-use Viduc\CasBundle\Repository\PersonaRepository;
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity(repositoryClass=PersonaRepository::class)
- */
 class Persona
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    private $username;
     private $prenom;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $nom;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
     private $age;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $lieu;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     private $aisanceNumerique;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     private $expertiseDomaine;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     private $frequenceUsage;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $metier;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $citation;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $histoire;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $buts;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $personnalite;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $photo;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $urlPhoto;
-
-    /**
-     * @ORM\Column(name="roles", type="array")
-     */
     private $roles = [];
-
-    /**
-     * @ORM\Column(name="is_active", type="boolean")
-     */
     private $isActive;
 
     public function __construct() {
@@ -104,6 +30,25 @@ class Persona
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function getPrenom(): ?string
@@ -283,6 +228,11 @@ class Persona
 
     function addRole($role) {
         $this->roles[] = $role;
+    }
+
+    function setRoles($role)
+    {
+        $this->roles = $role;
     }
 
     function setIsActive($isActive) {

@@ -85,7 +85,11 @@ class EnTantQueController extends AbstractController
         return [];
     }
 
-
+    /**
+     * Restaure la session d'origine
+     * @return RedirectResponse
+     * @test testRestaurerEnTantQue()
+     */
     public function restaurerEnTantQue()
     {
         $this->session->set('enTantQue.restaurer', true);

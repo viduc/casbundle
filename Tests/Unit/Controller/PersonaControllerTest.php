@@ -2,54 +2,40 @@
 
 namespace Viduc\CasBundle\Tests\Unit\Controller;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Kernel;
 use Viduc\CasBundle\Controller\PersonaController;
 use PHPUnit\Framework\TestCase;
 
 class PersonaControllerTest extends TestCase
 {
-    //protected $session;
     protected $persona;
     protected $kernel;
-    private $ressource;
+    protected $session;
 
     protected function setUp(): void
     {
-        //$this->session = new Session(new MockArraySessionStorage());
+        $this->session = new Session(new MockArraySessionStorage());
         $this->kernel = $this->createMock(Kernel::class);
-        $dir = __DIR__;
-        $this->ressource = str_replace("Controller", 'Ressources', $dir);
-        //$this->ressource = '../Ressources';
-        $this->kernel->method('getProjectDir')->willReturn($this->ressource);
-        $this->persona = new PersonaController($this->kernel);
-        if (file_exists(
-            $this->ressource.'/public/file/personas.json'
-        )) {
-            unlink($this->ressource.'/public/file/personas.json');
-        }
+        $this->persona = new PersonaController($this->kernel, $this->session);
+
     }
 
-    public function testCreerLeFichierPersonaSiInexistant()
+    public function testSeConnecter()
     {
-        $this->assertNull(
-            $this->persona->creerLeFichierPersonaSiInexistant()
-        );
-    }
-
-    public function testRecupererLesPersonas()
-    {
-        fopen(
-            $this->ressource.'/public/file/personas.json',
-            'wb'
-        );
-
-        $this->assertSame(
-            count($this->persona->recupererLesPersonas()), 0
-        );
-        unlink($this->ressource.'/public/file/personas.json');
         $this->persona->creerLeFichierPersonaSiInexistant();
-        $this->assertTrue(
-            count($this->persona->recupererLesPersonas()) >= 2
+        $this->persona->seConnecter(1);
+        self::assertSame(
+            $this->session->get('enTantQue.seConnecter'), 'username1'
+        );
+    }
+
+    public function testRestaurerEnTantQue()
+    {
+        $this->persona->restaurerEnTantQue();
+        self::assertTrue(
+            $this->session->get('enTantQue.restaurer')
         );
     }
 }

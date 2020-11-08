@@ -7,7 +7,7 @@
       "frequenceUsage": 3, "metier": "le métier", "citation":  "la citation",
       "histoire": "le lieu", "buts": "les buts", "personnalite": "personalité",
       "photo": "la photo", "urlPhoto": "l'url de la photo", "roles": "roles",
-      "isActive": true
+      "isActive": true, "username": "username1"
     },
     {
       "id": 2, "nom":  "le nom", "prenom":  "le prenom", "age": 32,
@@ -15,7 +15,7 @@
       "frequenceUsage": 3, "metier": "le métier", "citation":  "la citation",
       "histoire": "le lieu", "buts": "les buts", "personnalite": "personalité",
       "photo": "la photo", "urlPhoto": "l'url de la photo", "roles": "roles",
-      "isActive": true
+      "isActive": true, "username": "username2"
     }
   ]
 }

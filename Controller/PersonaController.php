@@ -2,66 +2,109 @@
 
 namespace Viduc\CasBundle\Controller;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Viduc\CasBundle\Entity\Persona;
+use Viduc\CasBundle\Form\PersonaType;
 
 class PersonaController extends AbstractController
 {
-    private $kernel;
-    private $filesystem;
+    private $session;
+    protected $personaManipulation;
+    protected $personaPhoto;
 
     public function __construct(
+        SessionInterface $session,
         KernelInterface $kernel
     ) {
-        $this->kernel = $kernel;
-        $this->filesystem = new Filesystem();
-        $this->creerLeFichierPersonaSiInexistant();
+        $this->personaManipulation = new PersonaManipulationController($kernel);
+        $this->personaPhoto = new PersonaPhotoController($kernel);
+        $this->session = $session;
     }
 
     public function index()
     {
         return $this->render('@Cas/persona/index.html.twig', [
-            'personas' => $this->recupererLesPersonas(),
+            'personas' => $this->personaManipulation->recupererLesPersonas(),
         ]);
     }
 
     /**
-     * Créer le fichier json des personas si il n'existe pas
-     * @test testCreerLeFichierPersonaSiInexistant()
+     * Ajoute un persona à la liste présente
+     * @param Request $request
+     * @return Response
      */
-    public function creerLeFichierPersonaSiInexistant()
+    public function ajouterUnPersona(Request $request)
     {
-        if (!$this->filesystem->exists(
-            $this->kernel->getProjectDir()
-            .'/public/file/personas.json')
-        ) {
-            $this->filesystem->copy(
-                $this->kernel->getProjectDir()
-                    .'/public/bundles/cas/personas/personas_base.json',
-                $this->kernel->getProjectDir()
-                    .'/public/file/personas.json'
+        $persona = new Persona();
+        $form = $this->createForm(PersonaType::class, $persona);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $photo = $this->personaPhoto->enregistrerPhoto(
+                $form->get('photoUrl')->getData(),
+                $form->getData()->getUsername()
             );
+            $this->personaManipulation->ajouterUnPersonaAuFichierJson(
+                $form->getData(),
+                $photo
+            );
+        }
+
+        return $this->render(
+            '@Cas/persona/ajouter.html.twig',
+            array('form' => $form->createView())
+        );
+    }
+
+    /**
+     * permet de se connecter avec un persona
+     * @param $id
+     * @return RedirectResponse
+     * @test testSeConnecter()
+     */
+    public function seConnecter($id)
+    {
+        try {
+            $persona = $this->personaManipulation->recupererUnPersona($id);
+            $this->session->set('enTantQue.seConnecter', $persona->getUsername());
+            /* @codeCoverageIgnoreStart */
+            return $this->redirect('persona');
+            /* @codeCoverageIgnoreEnd */
+        } catch (Exception $e) {
+            /* @codeCoverageIgnoreStart */
+            $this->addFlash(
+                'error',
+                'Impossible de se connecter avec ce persona'
+            );
+            /* @codeCoverageIgnoreStart */
         }
     }
 
     /**
-     * Récupère la liste des personas
-     * @return array - la liste d'objet json de persona
-     * @test testRecupererLesPersonas()
+     * Restaure la session d'origine
+     * @return RedirectResponse
+     * @test testRestaurerEnTantQue()
      */
-    public function recupererLesPersonas(): array
+    public function restaurerEnTantQue()
     {
-        $liste = [];
-        $listePersonasJson = file_get_contents(
-            $this->kernel->getProjectDir()
-            .'/public/file/personas.json'
-        );
-        $liste = json_decode($listePersonasJson, false);
-        if (!isset($liste->personas)) {
-            return [];
-        }
-
-        return $liste->personas;
+        $this->session->set('enTantQue.restaurer', true);
+        /* @codeCoverageIgnoreStart */
+        return $this->redirect('persona');
+        /* @codeCoverageIgnoreEnd */
     }
+
+
+
+
 }

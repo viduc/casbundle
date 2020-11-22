@@ -135,7 +135,6 @@ class PersonaManipulationControllerTest extends TestCase
         $persona->setHistoire('le lieu');
         $persona->setButs('les buts');
         $persona->setPersonnalite('personalité');
-        $persona->setPhoto('la photo');
         $persona->setUrlPhoto("l'url de la photo");
         $persona->setRoles('roles');
         $persona->setIsActive(true);

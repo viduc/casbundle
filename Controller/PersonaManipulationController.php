@@ -136,7 +136,6 @@ class PersonaManipulationController extends AbstractController implements Person
         $persona->setId($this->genererIdPersona());
         $persona->setButs('');
         $persona->setPersonnalite('');
-        $persona->setPhoto($photo);
         $persona->setUrlPhoto($photo);
         $liste = $this->recupererLesPersonas();
         $liste[] = $persona;

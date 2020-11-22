@@ -107,11 +107,11 @@ body {
 }
 .right-container .upload-photo input {
     border: none;
-    border-radius: 50%;
+    /*border-radius: 50%;*/
     height: 38px;
     margin-right: 10px;
     outline: none;
-    width: 38px;
+    /*width: 38px;*/
 }
 .right-container .upload-photo input i {
     color: rgba(0, 0, 0, 0.8);
@@ -200,7 +200,7 @@ body {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    width: 240%;
+    width: 190%;
     height: 100%;
 }
 
@@ -249,4 +249,40 @@ body {
     color: #D63301;
     background-color: #FFCCBA;
     background-image: url('https://i.imgur.com/GnyDvKN.png');
+}
+
+.carouselImage{
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#upload {
+    background-image: url("../images/file-upload.png");
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    /*margin-left: 100%;
+    margin-right: auto;*/
+}
+
+#carousel {
+    background-image: url("../images/file-carousel.png");
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    margin-left: 100%;
+    margin-right: auto;
+}
+
+.upload {
+    width: 50px;
+    background-color: #C82829;
 }

@@ -12,8 +12,9 @@ interface PersonaPhotoInterfaceController
     /** --------------------> AJOUT <--------------------*
      * @param $file
      * @param $username
+     * @param $urlPhoto
      */
-    public function enregistrerPhoto($file, $username);
+    public function enregistrerPhoto($file, $username, $urlPhoto);
     /** --------------------> MODIFICATION <--------------------**/
 
 

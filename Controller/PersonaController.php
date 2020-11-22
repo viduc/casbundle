@@ -49,21 +49,28 @@ class PersonaController extends AbstractController
         $persona = new Persona();
         $form = $this->createForm(PersonaType::class, $persona);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $photo = $this->personaPhoto->enregistrerPhoto(
-                $form->get('photoUrl')->getData(),
-                $form->getData()->getUsername()
+                $form->get('photo')->getData(),
+                $form->getData()->getUsername(),
+                $form->getData()->getUrlPhoto()
             );
             $this->personaManipulation->ajouterUnPersonaAuFichierJson(
                 $form->getData(),
                 $photo
             );
+            return $this->render('@Cas/persona/index.html.twig', [
+                'personas' => $this->personaManipulation->recupererLesPersonas(),
+            ]);
         }
 
         return $this->render(
             '@Cas/persona/ajouter.html.twig',
-            array('form' => $form->createView())
+            array(
+                'form' => $form->createView(),
+                'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
+                'photoPersona' => "/bundles/cas/images/personas/anonyme.png"
+            )
         );
     }
 

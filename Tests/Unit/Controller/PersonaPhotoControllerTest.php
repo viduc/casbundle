@@ -29,7 +29,12 @@ class PersonaPhotoControllerTest extends TestCase
 
 
     /** --------------------> LECTURE <--------------------**/
-
+    public function testRecupererLaListeDesPhotos()
+    {
+        self::assertTrue(
+            count($this->personaPhoto->recupererLaListeDesPhotos()) >= 2
+        );
+    }
 
     /** --------------------> AJOUT <--------------------**/
     public function testEnregistrerPhoto()
@@ -54,12 +59,16 @@ class PersonaPhotoControllerTest extends TestCase
             $this->kernel->getProjectDir() . '/tmp/photo-test.jpeg'
         );
         self::assertEquals(
-            "/images/personas/test.jpeg",
-            $this->personaPhoto->enregistrerPhoto($photo, 'test')
+            '/images/personas/test.jpeg',
+            $this->personaPhoto->enregistrerPhoto($photo, 'test', '')
         );
         self::assertEquals(
-            "/images/personas/nc.jpeg",
-            $this->personaPhoto->enregistrerPhoto(null, 'test')
+            '/images/personas/nc.jpeg',
+            $this->personaPhoto->enregistrerPhoto(null, 'test', '')
+        );
+        self::assertEquals(
+            'test',
+            $this->personaPhoto->enregistrerPhoto(null, 'test', 'test')
         );
     }
 

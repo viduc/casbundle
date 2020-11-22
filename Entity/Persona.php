@@ -18,7 +18,6 @@ class Persona
     private $histoire;
     private $buts;
     private $personnalite;
-    private $photo;
     private $urlPhoto;
     private $roles = [];
     private $isActive;
@@ -191,18 +190,6 @@ class Persona
     public function setPersonnalite(?string $personnalite): self
     {
         $this->personnalite = $personnalite;
-
-        return $this;
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(?string $photo): self
-    {
-        $this->photo = $photo;
 
         return $this;
     }

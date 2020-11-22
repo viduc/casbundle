@@ -68,7 +68,7 @@
                     <div class="cards">
                         {% for persona in personas  %}
                             <a class="card" href="#popup{{ persona.id }}" >
-                                {% if persona.photo is not null %}
+                                {% if persona.urlPhoto is not null %}
                                     {% set url = persona.urlPhoto %}
                                 {% endif %}
                                 <span class="card-header" style="background-image: url({{ asset(url) }});">

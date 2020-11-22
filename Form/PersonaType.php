@@ -5,6 +5,7 @@ namespace Viduc\CasBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -60,10 +61,11 @@ class PersonaType extends AbstractType
                 'attr' => ['class' => 'tinymce'],
                 'required' => true
             ])
-            ->add('photoUrl', FileType::class, [
+            ->add('photo', FileType::class, [
                 'label' => 'Photo',
                 'mapped' => false,
                 'required' => false,
+                'attr' => ['class' => ''],
                 'constraints' => [
                     new File([
                          'maxSize' => '1024k',
@@ -76,12 +78,9 @@ class PersonaType extends AbstractType
                      ])
                 ],
             ])
-            /*->add('photo', ChoiceType::class, [
-                'choices' => $photos
-            ])*/
+            ->add('urlPhoto', HiddenType::class,['required' => false])
             ->add('save', SubmitType::class)
-            /*->add('urlPhoto')
-            ->add('roles')*/;
+            /*->add('roles')*/;
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -67,6 +67,12 @@ interface PersonaManipulationInterfaceController
      */
     public function modifierUnPersonaAuFichierJson(Persona $persona);
 
+    /** --------------------> SUPPRESSION <--------------------**/
+    /**
+     * Supprime un persona dans le fichier json
+     * @param Persona $persona
+     */
+    public function supprimerUnPersonaDuFichierJson(Persona $persona);
 
 
 

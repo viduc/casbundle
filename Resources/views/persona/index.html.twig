@@ -57,6 +57,11 @@
         <div class="about__text">
             <p class="about__text--content">
                 <div class="container">
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
                 {% if app.session.get('enTantQue.seConnecter') is defined
                     and app.session.get('enTantQue.seConnecter')
                 %}
@@ -206,6 +211,15 @@
                                     path('personaModifier',
                                         {'id': persona.id})
                                     }}" class="popup__modifier"></a>
+                                    <a href="{{
+                                    path('personaSupprimer',
+                                        {'id': persona.id})
+                                    }}" class="popup__supprimer"
+                                   onclick="return confirm(
+                                       'Etes vous sure de voulioir supprimer ' +
+                                        'ce persona?'
+                                   )"
+                                    ></a>
                                     <a class="popup__close" href="#">X</a>
                                 </div>
                             </div>

@@ -109,12 +109,6 @@ class PersonaManipulationControllerTest extends TestCase
             $this->personamanipulation->genererIdPersona()
         );
     }
-    /** --------------------> FORMULAIRE <--------------------**/
-    public function testFormulairePersona()
-    {
-
-    }
-
 
     /** --------------------> AJOUT <--------------------**/
     public function testAjouterUnPersonaAuFichierJson()
@@ -148,6 +142,24 @@ class PersonaManipulationControllerTest extends TestCase
             2,
             $this->personamanipulation->recupererLesPersonas()
         );
+    }
+
+    /** --------------------> SUPPRESSION <--------------------**/
+    public function testSupprimerUnPersonaDuFichierJson()
+    {
+        $this->personamanipulation->creerLeFichierPersonaSiInexistant();
+        self::assertCount(
+            2,
+            $this->personamanipulation->recupererLesPersonas()
+        );
+        $this->personamanipulation->supprimerUnPersonaDuFichierJson(
+            $this->genererUnPersona()
+        );
+        self::assertCount(
+            1,
+            $this->personamanipulation->recupererLesPersonas()
+        );
+
     }
 
     /** --------------------> Méthodes utiles au test <--------------------**/

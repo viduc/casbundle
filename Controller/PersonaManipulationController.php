@@ -179,14 +179,20 @@ class PersonaManipulationController extends AbstractController implements Person
         $this->enregistrerLaListeDesPersonasDansLeFichierJson($liste);
     }
 
-
-
-
-
-
-
-
-
-
+    /** --------------------> SUPPRESSION <--------------------**/
+    /**
+     * Supprime un persona dans le fichier json
+     * @param Persona $persona
+     */
+    public function supprimerUnPersonaDuFichierJson(Persona $persona)
+    {
+        $liste = [];
+        foreach ($this->recupererLesPersonas() as $element ) {
+            if ($element->getId() !== $persona->getId()) {
+                $liste[] = $element;
+            }
+        }
+        $this->enregistrerLaListeDesPersonasDansLeFichierJson($liste);
+    }
 
 }

@@ -29,3 +29,7 @@ personaAjouter:
 personaModifier:
     path: /personaModifier/{id}
     controller: Viduc\CasBundle\Controller\PersonaController::modifierUnPersona
+
+personaSupprimer:
+    path: /personaSuprimer/{id}
+    controller: Viduc\CasBundle\Controller\PersonaController::supprimerUnPersona

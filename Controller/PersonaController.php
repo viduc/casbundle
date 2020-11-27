@@ -60,7 +60,7 @@ class PersonaController extends AbstractController
     }
 
     /**
-     * Modifie un persone
+     * Modifie un persona
      * @param Request $request
      * @param int $id
      * @return Response
@@ -77,6 +77,21 @@ class PersonaController extends AbstractController
                 'photoPersona' => $form->vars['value']->getUrlPhoto()
             )
         );
+    }
+
+    /**
+     * Supprime un persona
+     * @param int $id
+     * @throws Exception
+     */
+    public function supprimerUnPersona(int $id)
+    {
+        $this->personaManipulation->supprimerUnPersonaDuFichierJson(
+            $this->personaManipulation->recupererUnPersona($id)
+        );
+        $this->addFlash('success', 'Le persona a été supprimé');
+
+        return $this->redirectToRoute('personaIndex');
     }
 
     /**

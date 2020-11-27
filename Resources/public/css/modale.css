@@ -142,6 +142,25 @@ html, body {
     cursor: pointer;
     text-decoration: none;
 }
+.popup__modifier {
+    position: absolute;
+    left: 2rem;
+    top: 1rem;
+    width: 24px;
+    height: 24px;
+    font-size: .875rem;
+    font-weight: 300;
+    border-radius: 100%;
+    background-image: url("../images/modifier.png");
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 4;
+    color: #fff;
+    line-height: 3rem;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}
 
 /* progress bar */
 .progress-title{

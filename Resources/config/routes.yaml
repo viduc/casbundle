@@ -25,3 +25,7 @@ personaRestore:
 personaAjouter:
     path: /personaAjouter
     controller: Viduc\CasBundle\Controller\PersonaController::ajouterUnPersona
+
+personaModifier:
+    path: /personaModifier/{id}
+    controller: Viduc\CasBundle\Controller\PersonaController::modifierUnPersona

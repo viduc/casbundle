@@ -44,6 +44,19 @@ class PersonaManipulationControllerTest extends TestCase
         );
     }
 
+    public function testEnregistrerLaListeDesPersonasDansLeFichierJson()
+    {
+        $this->personamanipulation->creerLeFichierPersonaSiInexistant();
+        $liste[] = $this->genererUnPersona();
+        $this->personamanipulation->enregistrerLaListeDesPersonasDansLeFichierJson(
+            $liste
+        );
+        self::assertCount(
+            1,
+            $this->personamanipulation->recupererLesPersonas()
+        );
+    }
+
     /** --------------------> LECTURE <--------------------**/
     public function testLireLeFicherDesPersonas()
     {
@@ -96,6 +109,12 @@ class PersonaManipulationControllerTest extends TestCase
             $this->personamanipulation->genererIdPersona()
         );
     }
+    /** --------------------> FORMULAIRE <--------------------**/
+    public function testFormulairePersona()
+    {
+
+    }
+
 
     /** --------------------> AJOUT <--------------------**/
     public function testAjouterUnPersonaAuFichierJson()
@@ -106,8 +125,7 @@ class PersonaManipulationControllerTest extends TestCase
             $this->personamanipulation->recupererLesPersonas()
         );
         $this->personamanipulation->ajouterUnPersonaAuFichierJson(
-            $this->genererUnPersona(),
-            'test'
+            $this->genererUnPersona()
         );
         self::assertCount(
             3,
@@ -116,6 +134,21 @@ class PersonaManipulationControllerTest extends TestCase
     }
 
     /** --------------------> MODIFICATION <--------------------**/
+    public function testModifierUnPersonaAuFichierJson()
+    {
+        $this->personamanipulation->creerLeFichierPersonaSiInexistant();
+        self::assertCount(
+            2,
+            $this->personamanipulation->recupererLesPersonas()
+        );
+        $this->personamanipulation->modifierUnPersonaAuFichierJson(
+            $this->genererUnPersona()
+        );
+        self::assertCount(
+            2,
+            $this->personamanipulation->recupererLesPersonas()
+        );
+    }
 
     /** --------------------> Méthodes utiles au test <--------------------**/
     private function genererUnPersona()

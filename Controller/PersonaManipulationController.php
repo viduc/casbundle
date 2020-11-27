@@ -3,20 +3,22 @@
 namespace Viduc\CasBundle\Controller;
 
 use Exception;
+use http\Client\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Viduc\CasBundle\Entity\Persona;
+use Viduc\CasBundle\Form\PersonaType;
 
 class PersonaManipulationController extends AbstractController implements PersonaManipulationInterfaceController
 {
     private $kernel;
     private $filesystem;
     private $serializer;
+    protected $personaPhoto;
 
     public function __construct(KernelInterface $kernel)
     {
@@ -26,6 +28,7 @@ class PersonaManipulationController extends AbstractController implements Person
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $this->serializer = new Serializer($normalizers, $encoders);
+        $this->personaPhoto = new PersonaPhotoController($kernel);
     }
 
     /** --------------------> CREATION <--------------------**/
@@ -46,6 +49,24 @@ class PersonaManipulationController extends AbstractController implements Person
                 .'/public/file/personas.json'
             );
         }
+    }
+
+    /**
+     * Enregsitre la liste des personas dans le fichier json
+     * @param array $liste
+     */
+    public function enregistrerLaListeDesPersonasDansLeFichierJson(array $liste)
+    {
+        $liste = $this->serializer->serialize($liste, 'json');
+        $liste = '{"personas":' . $liste . '}';
+        $file = $this->kernel->getProjectDir().'/public/file/personas.json';
+        if (file_exists($file)) {
+            unlink($this->kernel->getProjectDir().'/public/file/personas.json');
+        }
+        file_put_contents(
+            $this->kernel->getProjectDir().'/public/file/personas.json',
+            $liste
+        );
     }
 
     /** --------------------> LECTURE <--------------------**/
@@ -128,31 +149,35 @@ class PersonaManipulationController extends AbstractController implements Person
     /**
      * Ajoute un persona dans le fichier json
      * @param $persona
-     * @param $photo
      * @test testAjouterUnPersonaAuFichierJson()
      */
-    public function ajouterUnPersonaAuFichierJson($persona, $photo)
+    public function ajouterUnPersonaAuFichierJson($persona)
     {
         $persona->setId($this->genererIdPersona());
-        $persona->setButs('');
-        $persona->setPersonnalite('');
-        $persona->setUrlPhoto($photo);
+        $persona->setButs('');//TODO à revoir
+        $persona->setPersonnalite('');//TODO à revoir
         $liste = $this->recupererLesPersonas();
         $liste[] = $persona;
-        $liste = $this->serializer->serialize($liste, 'json');
-        $liste = '{"personas":' . $liste . '}';
-        $file = $this->kernel->getProjectDir().'/public/file/personas.json';
-        if (file_exists($file)) {
-            unlink($this->kernel->getProjectDir().'/public/file/personas.json');
-        }
-        file_put_contents(
-            $this->kernel->getProjectDir().'/public/file/personas.json',
-            $liste
-        );
+        $this->enregistrerLaListeDesPersonasDansLeFichierJson($liste);
     }
 
     /** --------------------> MODIFICATION <--------------------**/
-
+    /**
+     * Modifie un persona dans le fichier json
+     * @param Persona $persona
+     */
+    public function modifierUnPersonaAuFichierJson($persona)
+    {
+        $liste = [];
+        foreach ($this->recupererLesPersonas() as $element ) {
+            if ($element->getId() !== $persona->getId()) {
+                $liste[] = $element;
+            } else {
+                $liste[] = $persona;
+            }
+        }
+        $this->enregistrerLaListeDesPersonasDansLeFichierJson($liste);
+    }
 
 
 

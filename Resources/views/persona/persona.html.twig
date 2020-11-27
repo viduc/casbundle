@@ -32,8 +32,8 @@
                         <div class="progress-outer">
                             <div class="progress">
                                 <div class="progress-bar
-                                                                progress-bar-striped
-                                                                progress-bar-danger" style="width:{{ persona.expertiseDomaine }}%;">
+                                    progress-bar-striped
+                                    progress-bar-danger" style="width:{{ persona.expertiseDomaine }}%;">
                                 </div>
                                 <div class="progress-value">
                                     <span>{{ persona.expertiseDomaine }}</span>%
@@ -46,8 +46,8 @@
                         <div class="progress-outer">
                             <div class="progress">
                                 <div class="progress-bar
-                                                            progress-bar-striped
-                                                            progress-bar-danger" style="width:{{ persona.frequenceUsage }}%;">
+                                    progress-bar-striped
+                                    progress-bar-danger" style="width:{{ persona.frequenceUsage }}%;">
                                 </div>
                                 <div class="progress-value">
                                     <span>{{ persona.frequenceUsage }}</span>%
@@ -110,13 +110,11 @@
                     }}" class="btn" style="background-color: #B0413E">deconnecter</a>
                 </div>
             {% else %}
-                <div align="center">
-                    <a href="{{
-                    path('personaSeConnecter',
-                        {'id': persona.id})
-                    }}" class="btn" style="background-color: #B0413E">connecter</a>
-                </div>
             {% endif %}
+            <a href="{{
+            path('personaModifier',
+                {'id': persona.id})
+            }}" class="btn" style="background-color: #B0413E">modifier</a>
         </div>
         <a class="popup__close" href="#">X</a>
     </div>

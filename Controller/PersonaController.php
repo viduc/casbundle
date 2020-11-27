@@ -5,6 +5,7 @@ namespace Viduc\CasBundle\Controller;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,10 +44,55 @@ class PersonaController extends AbstractController
      * Ajoute un persona à la liste présente
      * @param Request $request
      * @return Response
+     * @throws Exception
      */
     public function ajouterUnPersona(Request $request)
     {
+        $form = $this->creerLeFormulairePersona($request);
+        return $this->render(
+            '@Cas/persona/ajouter.html.twig',
+            array(
+                'form' => $form,
+                'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
+                'photoPersona' => "/bundles/cas/images/personas/anonyme.png"
+            )
+        );
+    }
+
+    /**
+     * Modifie un persone
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     * @throws Exception
+     */
+    public function modifierUnPersona(request $request, int $id)
+    {
+        $form = $this->creerLeFormulairePersona($request, $id);
+        return $this->render(
+            '@Cas/persona/ajouter.html.twig',
+            array(
+                'form' => $form,
+                'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
+                'photoPersona' => $form->vars['value']->getUrlPhoto()
+            )
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return FormView | Response
+     * @throws Exception
+     */
+    public function creerLeFormulairePersona(
+        Request $request,
+        int $id = null
+    ): FormView {
         $persona = new Persona();
+        if ($id) {
+            $persona = $this->personaManipulation->recupererUnPersona($id);
+        }
         $form = $this->createForm(PersonaType::class, $persona);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -55,23 +101,23 @@ class PersonaController extends AbstractController
                 $form->getData()->getUsername(),
                 $form->getData()->getUrlPhoto()
             );
-            $this->personaManipulation->ajouterUnPersonaAuFichierJson(
-                $form->getData(),
-                $photo
-            );
+            $persona = $form->getData();
+            $persona->setUrlPhoto($photo);
+            if ($id) {
+                $this->personaManipulation->modifierUnPersonaAuFichierJson(
+                    $persona
+                );
+            } else {
+                $this->personaManipulation->ajouterUnPersonaAuFichierJson(
+                    $persona
+                );
+            }
             return $this->render('@Cas/persona/index.html.twig', [
                 'personas' => $this->personaManipulation->recupererLesPersonas(),
             ]);
         }
 
-        return $this->render(
-            '@Cas/persona/ajouter.html.twig',
-            array(
-                'form' => $form->createView(),
-                'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
-                'photoPersona' => "/bundles/cas/images/personas/anonyme.png"
-            )
-        );
+        return $form->createView();
     }
 
     /**
@@ -80,7 +126,7 @@ class PersonaController extends AbstractController
      * @return RedirectResponse
      * @test testSeConnecter()
      */
-    public function seConnecter($id)
+    public function seConnecter($id): ?RedirectResponse
     {
         try {
             $persona = $this->personaManipulation->recupererUnPersona($id);
@@ -103,7 +149,7 @@ class PersonaController extends AbstractController
      * @return RedirectResponse
      * @test testRestaurerEnTantQue()
      */
-    public function restaurerEnTantQue()
+    public function restaurerEnTantQue(): RedirectResponse
     {
         $this->session->set('enTantQue.restaurer', true);
         /* @codeCoverageIgnoreStart */

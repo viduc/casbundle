@@ -202,6 +202,10 @@
                                             </div>
                                         {% endif %}
                                     </div>
+                                    <a href="{{
+                                    path('personaModifier',
+                                        {'id': persona.id})
+                                    }}" class="popup__modifier"></a>
                                     <a class="popup__close" href="#">X</a>
                                 </div>
                             </div>

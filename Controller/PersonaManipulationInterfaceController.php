@@ -26,6 +26,12 @@ interface PersonaManipulationInterfaceController
      */
     public function creerLeFichierPersonaSiInexistant();
 
+    /**
+     * Enregsitre la liste des personas dans le fichier json
+     * @param array $liste
+     */
+    public function enregistrerLaListeDesPersonasDansLeFichierJson(array $liste);
+
     /** --------------------> LECTURE <--------------------**/
     public function lireLeFicherDesPersonas();
 
@@ -51,12 +57,15 @@ interface PersonaManipulationInterfaceController
     /**
      * Ajoute un persona dans le fichier json
      * @param $persona
-     * @param $photo
      */
-    public function ajouterUnPersonaAuFichierJson($persona, $photo);
+    public function ajouterUnPersonaAuFichierJson($persona);
 
     /** --------------------> MODIFICATION <--------------------**/
-
+    /**
+     * Modifie un persona dans le fichier json
+     * @param Persona $persona
+     */
+    public function modifierUnPersonaAuFichierJson(Persona $persona);
 
 
 

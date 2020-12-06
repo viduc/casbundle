@@ -8,9 +8,9 @@ env:
     - CC_TEST_REPORTER_ID=6c93a972033b86464ae4d510468f04e4b3bda78f8184780b8af0b6d6d7aa8600
 addons:
   sonarcloud:
-    organization: viduc
+    organization: "viduc"
     token:
-      secure: 6c93a972033b86464ae4d510468f04e4b3bda78f8184780b8af0b6d6d7aa8600
+      secure: "bTLSXIezM6+yfjvmvbfIdoQwY677MpAYQoyB2KKaBW3Nuo1nu9x7KpuvDO+QP2CniKlyxdQ2JSCj/Jog4dTfwPgloDfDW6GxiIUto/V1wk28wJiHXb8M7fiGlaKn6eeOGf4pfmE+aFY9+YJtbCmysieaziKWtL/iuC57NtHacvVyAkf6Anc1bdnfsgqVYBkduiPMs9qVq7MAy3Q0Sj5WcxdU3Zp9ZyKfRagxHvXYgrK7eegYRsWehpqSx2J7x7ZMP0lKBA9I5GJP+HxoMnD6kHY0LR2ySZfdYKruh7Ws9SyfEu9db21ABWMeUXW8HGmV6LRnPg/IqZbQQkZyivkQWQiEkMnmGoY0ex0JlX/9lxMnBlOSsUffzKKnplyAovuIphxvK3VW1Y3WFxC5vNloWhoVpznJ63AhFbbQbHbL6CYx+iZ4Qi2c9No9W/zTTCXr8x0BKo1ckD0cxJ2Gqbm71Xi9r5S09uayZgLKnX1vuleienj+12B9cCbqkc9IGY0/Z0feSmufw54V+t2GUPKtADCh+0eDyNfpAM++87Xrp8cLdtD0AIKlNnMfo7HznbiVcI7Oay1/1C4jVSQYQK0DiByO4k35YOsOIszqZyKgcQLujvHdU2M4aNCcypjGo3QoXmtDPT8k3lJqvGJ/JxkzvDin7I1m+SjUOzZrcFtXEwQ="
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter

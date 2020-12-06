@@ -17,6 +17,7 @@ script:
   - composer require symfony/security-core:3.4.42
   - composer require symfony/console:3.4.42
   - composer require codeclimate/php-test-reporter
+  - composer require symfony/serializer
   - vendor/bin/phpunit --coverage-clover=clover.xml
 after_script:
   - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT

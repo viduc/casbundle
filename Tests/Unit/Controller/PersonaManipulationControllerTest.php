@@ -5,20 +5,20 @@ namespace Viduc\CasBundle\Tests\Unit\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Kernel;
-use Viduc\CasBundle\Controller\PersonaController;
 use PHPUnit\Framework\TestCase;
 use Viduc\CasBundle\Controller\PersonaManipulationController;
-use Viduc\CasBundle\Entity\Persona;
-use Exception;
+use Viduc\CasBundle\Exception\PersonaException;
+use Viduc\CasBundle\Tests\Unit\Persona\DonnesDeTest;
 
 class PersonaManipulationControllerTest extends TestCase
 {
     protected $personamanipulation;
     protected $kernel;
     protected $session;
-    private $ressource;
+    protected $ressource;
+    protected $donneesDeTest;
 
-    protected function setUp(): void
+    final protected function setUp(): void
     {
         $this->session = new Session(new MockArraySessionStorage());
         $this->kernel = $this->createMock(Kernel::class);
@@ -26,28 +26,28 @@ class PersonaManipulationControllerTest extends TestCase
         $this->ressource = str_replace("Controller", 'Ressources', $dir);
         $this->kernel->method('getProjectDir')->willReturn($this->ressource);
         $this->personamanipulation = new PersonaManipulationController(
-            $this->kernel,
-            $this->session
+            $this->kernel
         );
         if (file_exists(
-            $this->ressource.'/public/file/personas.json'
+            $this->ressource . PERSONA_JSON
         )) {
-            unlink($this->ressource.'/public/file/personas.json');
+            unlink($this->ressource . PERSONA_JSON);
         }
+        $this->donneesDeTest = new DonnesDeTest();
     }
 
     /** --------------------> CREATION <--------------------**/
-    public function testCreerLeFichierPersonaSiInexistant()
+    final public function testCreerLeFichierPersonaSiInexistant() : void
     {
         self::assertNull(
             $this->personamanipulation->creerLeFichierPersonaSiInexistant()
         );
     }
 
-    public function testEnregistrerLaListeDesPersonasDansLeFichierJson()
+    final public function testEnregistrerLaListeDesPersonasDansLeFichierJson() : void
     {
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
-        $liste[] = $this->genererUnPersona();
+        $liste[] = $this->donneesDeTest->genererUnPersona();
         $this->personamanipulation->enregistrerLaListeDesPersonasDansLeFichierJson(
             $liste
         );
@@ -58,7 +58,7 @@ class PersonaManipulationControllerTest extends TestCase
     }
 
     /** --------------------> LECTURE <--------------------**/
-    public function testLireLeFicherDesPersonas()
+    final public function testLireLeFicherDesPersonas() : void
     {
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
         self::assertIsString(
@@ -66,10 +66,10 @@ class PersonaManipulationControllerTest extends TestCase
         );
     }
 
-    public function testRecupererLesPersonas()
+    final public function testRecupererLesPersonas() : void
     {
         fopen(
-            $this->ressource.'/public/file/personas.json',
+            $this->ressource . PERSONA_JSON,
             'wb'
         );
 
@@ -77,17 +77,17 @@ class PersonaManipulationControllerTest extends TestCase
             0,
             $this->personamanipulation->recupererLesPersonas()
         );
-        unlink($this->ressource.'/public/file/personas.json');
+        unlink($this->ressource . PERSONA_JSON);
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
         self::assertTrue(
             count($this->personamanipulation->recupererLesPersonas()) >= 2
         );
     }
 
-    public function testRecupererUnPersona()
+    final public function testRecupererUnPersona() : void
     {
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
-        $persona = $this->genererUnPersona();
+        $persona = $this->donneesDeTest->genererUnPersona();
         self::assertEquals(
             $this->personamanipulation->recupererUnPersona(1),
             $persona
@@ -95,13 +95,13 @@ class PersonaManipulationControllerTest extends TestCase
 
         try {
             $this->personamanipulation->recupererUnPersona(111);
-        } catch (Exception $exception) {
+        } catch (PersonaException $exception) {
             $message = 'Aucun persona trouvé';
-            self::assertEquals($exception->getMessage(), $message);
+            self::assertEquals($message, $exception->getMessage());
         }
     }
 
-    public function testGenererIdPersona()
+    final public function testGenererIdPersona() : void
     {
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
         self::assertEquals(
@@ -111,7 +111,7 @@ class PersonaManipulationControllerTest extends TestCase
     }
 
     /** --------------------> AJOUT <--------------------**/
-    public function testAjouterUnPersonaAuFichierJson()
+    final public function testAjouterUnPersonaAuFichierJson() : void
     {
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
         self::assertCount(
@@ -119,7 +119,7 @@ class PersonaManipulationControllerTest extends TestCase
             $this->personamanipulation->recupererLesPersonas()
         );
         $this->personamanipulation->ajouterUnPersonaAuFichierJson(
-            $this->genererUnPersona()
+            $this->donneesDeTest->genererUnPersona()
         );
         self::assertCount(
             3,
@@ -128,7 +128,7 @@ class PersonaManipulationControllerTest extends TestCase
     }
 
     /** --------------------> MODIFICATION <--------------------**/
-    public function testModifierUnPersonaAuFichierJson()
+    final public function testModifierUnPersonaAuFichierJson() : void
     {
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
         self::assertCount(
@@ -136,7 +136,7 @@ class PersonaManipulationControllerTest extends TestCase
             $this->personamanipulation->recupererLesPersonas()
         );
         $this->personamanipulation->modifierUnPersonaAuFichierJson(
-            $this->genererUnPersona()
+            $this->donneesDeTest->genererUnPersona()
         );
         self::assertCount(
             2,
@@ -145,7 +145,7 @@ class PersonaManipulationControllerTest extends TestCase
     }
 
     /** --------------------> SUPPRESSION <--------------------**/
-    public function testSupprimerUnPersonaDuFichierJson()
+    final public function testSupprimerUnPersonaDuFichierJson() : void
     {
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
         self::assertCount(
@@ -153,37 +153,12 @@ class PersonaManipulationControllerTest extends TestCase
             $this->personamanipulation->recupererLesPersonas()
         );
         $this->personamanipulation->supprimerUnPersonaDuFichierJson(
-            $this->genererUnPersona()
+            $this->donneesDeTest->genererUnPersona()
         );
         self::assertCount(
             1,
             $this->personamanipulation->recupererLesPersonas()
         );
 
-    }
-
-    /** --------------------> Méthodes utiles au test <--------------------**/
-    private function genererUnPersona()
-    {
-        $persona = new persona();
-        $persona->setId(1);
-        $persona->setUsername('username1');
-        $persona->setNom('le nom');
-        $persona->setPrenom('le prenom');
-        $persona->setAge(32);
-        $persona->setLieu('le lieu');
-        $persona->setAisanceNumerique(5);
-        $persona->setExpertiseDomaine(2);
-        $persona->setFrequenceUsage(3);
-        $persona->setMetier('le métier');
-        $persona->setCitation('la citation');
-        $persona->setHistoire('le lieu');
-        $persona->setButs('les buts');
-        $persona->setPersonnalite('personalité');
-        $persona->setUrlPhoto("l'url de la photo");
-        $persona->setRoles('roles');
-        $persona->setIsActive(true);
-
-        return $persona;
     }
 }

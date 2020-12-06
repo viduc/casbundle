@@ -7,31 +7,46 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Kernel;
 use Viduc\CasBundle\Controller\PersonaController;
 use PHPUnit\Framework\TestCase;
+use Viduc\CasBundle\Controller\PersonaManipulationInterfaceController;
+use Viduc\CasBundle\Tests\Unit\Persona\DonnesDeTest;
 
 class PersonaControllerTest extends TestCase
 {
     protected $persona;
     protected $kernel;
     protected $session;
+    protected $ressource;
+    protected $personaManipulation;
+    protected $donneesDeTest;
 
-    protected function setUp(): void
+    final protected function setUp(): void
     {
         $this->session = new Session(new MockArraySessionStorage());
         $this->kernel = $this->createMock(Kernel::class);
-        $this->persona = new PersonaController($this->kernel, $this->session);
-
+        $dir = __DIR__;
+        $this->ressource = str_replace("Controller", 'Ressources', $dir);
+        $this->kernel->method('getProjectDir')->willReturn($this->ressource);
+        $this->persona = new PersonaController($this->session, $this->kernel);
+        $this->personaManipulation = $this->createMock(
+            PersonaManipulationInterfaceController::class
+        );
+        $this->persona->setPersonManipulation($this->personaManipulation);
+        $this->donneesDeTest = new DonnesDeTest();
     }
 
-    public function testSeConnecter()
+    final public function testSeConnecter() : void
     {
-        $this->persona->creerLeFichierPersonaSiInexistant();
+        $this->personaManipulation->method('recupererUnPersona')->willReturn(
+            $this->donneesDeTest->genererUnPersona()
+        );
         $this->persona->seConnecter(1);
         self::assertSame(
-            $this->session->get('enTantQue.seConnecter'), 'username1'
+            'username1',
+            $this->session->get('enTantQue.seConnecter')
         );
     }
 
-    public function testRestaurerEnTantQue()
+    final public function testRestaurerEnTantQue() : void
     {
         $this->persona->restaurerEnTantQue();
         self::assertTrue(

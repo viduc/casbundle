@@ -2,6 +2,8 @@
 
 namespace Viduc\CasBundle\Controller;
 
+use Symfony\Component\HttpFoundation\File\File;
+
 interface PersonaPhotoInterfaceController
 {
     /** --------------------> CREATION <--------------------**/
@@ -14,7 +16,11 @@ interface PersonaPhotoInterfaceController
      * @param $username
      * @param $urlPhoto
      */
-    public function enregistrerPhoto($file, $username, $urlPhoto);
+    public function enregistrerPhoto(
+        String $username,
+        String $urlPhoto,
+        File $file
+    );
     /** --------------------> MODIFICATION <--------------------**/
 
 

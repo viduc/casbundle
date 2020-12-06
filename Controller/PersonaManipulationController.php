@@ -2,8 +2,6 @@
 
 namespace Viduc\CasBundle\Controller;
 
-use Exception;
-use http\Client\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -11,7 +9,9 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Viduc\CasBundle\Entity\Persona;
-use Viduc\CasBundle\Form\PersonaType;
+use Viduc\CasBundle\Exception\PersonaException;
+
+define("PERSONA_JSON", '/public/file/personas.json');
 
 class PersonaManipulationController extends AbstractController implements PersonaManipulationInterfaceController
 {
@@ -36,17 +36,15 @@ class PersonaManipulationController extends AbstractController implements Person
      * Créer le fichier json des personas si il n'existe pas
      * @test testCreerLeFichierPersonaSiInexistant()
      */
-    public function creerLeFichierPersonaSiInexistant()
+    final public function creerLeFichierPersonaSiInexistant() : void
     {
         if (!$this->filesystem->exists(
-            $this->kernel->getProjectDir()
-            .'/public/file/personas.json')
+            $this->kernel->getProjectDir() . PERSONA_JSON)
         ) {
             $this->filesystem->copy(
                 $this->kernel->getProjectDir()
                 .'/public/bundles/cas/personas/personas_base.json',
-                $this->kernel->getProjectDir()
-                .'/public/file/personas.json'
+                $this->kernel->getProjectDir() . PERSONA_JSON
             );
         }
     }
@@ -54,18 +52,20 @@ class PersonaManipulationController extends AbstractController implements Person
     /**
      * Enregsitre la liste des personas dans le fichier json
      * @param array $liste
+     * @return void
      */
-    public function enregistrerLaListeDesPersonasDansLeFichierJson(array $liste)
-    {
-        $liste = $this->serializer->serialize($liste, 'json');
-        $liste = '{"personas":' . $liste . '}';
-        $file = $this->kernel->getProjectDir().'/public/file/personas.json';
+    final public function enregistrerLaListeDesPersonasDansLeFichierJson(
+        array $liste
+    ) : void {
+        $listeSerialize = $this->serializer->serialize($liste, 'json');
+        $listeFinale = '{"personas":' . $listeSerialize . '}';
+        $file = $this->kernel->getProjectDir() . PERSONA_JSON;
         if (file_exists($file)) {
-            unlink($this->kernel->getProjectDir().'/public/file/personas.json');
+            unlink($this->kernel->getProjectDir() . PERSONA_JSON);
         }
         file_put_contents(
-            $this->kernel->getProjectDir().'/public/file/personas.json',
-            $liste
+            $this->kernel->getProjectDir() . PERSONA_JSON,
+            $listeFinale
         );
     }
 
@@ -75,11 +75,10 @@ class PersonaManipulationController extends AbstractController implements Person
      * @test testLireLeFicherDesPersonas()
      * @return false|string
      */
-    public function lireLeFicherDesPersonas()
+    final public function lireLeFicherDesPersonas() : string
     {
         return file_get_contents(
-            $this->kernel->getProjectDir()
-            .'/public/file/personas.json'
+            $this->kernel->getProjectDir() . PERSONA_JSON
         );
     }
 
@@ -88,7 +87,7 @@ class PersonaManipulationController extends AbstractController implements Person
      * @return array - la liste d'objets de persona
      * @test testRecupererLesPersonas()
      */
-    public function recupererLesPersonas(): array
+    final public function recupererLesPersonas(): array
     {
         $personas = [];
         $listePersonasJson = $this->lireLeFicherDesPersonas();
@@ -111,9 +110,9 @@ class PersonaManipulationController extends AbstractController implements Person
      * @param $id
      * @return Persona - objet Persona
      * @test testRecupererUnPersona()
-     * @throws Exception
+     * @throws PersonaException
      */
-    public function recupererUnPersona($id)
+    final public function recupererUnPersona($id) : Persona
     {
         $personas = $this->recupererLesPersonas();
         foreach ($personas as $persona) {
@@ -121,7 +120,7 @@ class PersonaManipulationController extends AbstractController implements Person
                 return $persona;
             }
         }
-        throw new Exception('Aucun persona trouvé');
+        throw new PersonaException('Aucun persona trouvé');
     }
 
     /**
@@ -129,7 +128,7 @@ class PersonaManipulationController extends AbstractController implements Person
      * @return int
      * @test testGenererIdPersona()
      */
-    public function genererIdPersona()
+    final public function genererIdPersona() : int
     {
         $personas = $this->recupererLesPersonas();
         $ids = [];
@@ -151,7 +150,7 @@ class PersonaManipulationController extends AbstractController implements Person
      * @param $persona
      * @test testAjouterUnPersonaAuFichierJson()
      */
-    public function ajouterUnPersonaAuFichierJson($persona)
+    final public function ajouterUnPersonaAuFichierJson(Persona $persona) : void
     {
         $persona->setId($this->genererIdPersona());
         $persona->setButs('');//TODO à revoir
@@ -166,7 +165,7 @@ class PersonaManipulationController extends AbstractController implements Person
      * Modifie un persona dans le fichier json
      * @param Persona $persona
      */
-    public function modifierUnPersonaAuFichierJson($persona)
+    final public function modifierUnPersonaAuFichierJson(Persona $persona) : void
     {
         $liste = [];
         foreach ($this->recupererLesPersonas() as $element ) {
@@ -184,7 +183,7 @@ class PersonaManipulationController extends AbstractController implements Person
      * Supprime un persona dans le fichier json
      * @param Persona $persona
      */
-    public function supprimerUnPersonaDuFichierJson(Persona $persona)
+    final public function supprimerUnPersonaDuFichierJson(Persona $persona): void
     {
         $liste = [];
         foreach ($this->recupererLesPersonas() as $element ) {

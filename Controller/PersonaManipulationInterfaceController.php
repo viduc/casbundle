@@ -3,19 +3,8 @@
 namespace Viduc\CasBundle\Controller;
 
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Viduc\CasBundle\Entity\Persona;
-use Viduc\CasBundle\Form\PersonaType;
+use Viduc\CasBundle\Exception\PersonaException;
 
 interface PersonaManipulationInterfaceController
 {
@@ -24,16 +13,23 @@ interface PersonaManipulationInterfaceController
      * Créer le fichier json des personas si il n'existe pas
      * @test testCreerLeFichierPersonaSiInexistant()
      */
-    public function creerLeFichierPersonaSiInexistant();
+    public function creerLeFichierPersonaSiInexistant() : void;
 
     /**
      * Enregsitre la liste des personas dans le fichier json
      * @param array $liste
      */
-    public function enregistrerLaListeDesPersonasDansLeFichierJson(array $liste);
+    public function enregistrerLaListeDesPersonasDansLeFichierJson(
+        array $liste
+    ) : void;
 
     /** --------------------> LECTURE <--------------------**/
-    public function lireLeFicherDesPersonas();
+    /**
+     * Lit le fichier des personas
+     * @test testLireLeFicherDesPersonas()
+     * @return false|string
+     */
+    public function lireLeFicherDesPersonas() : string;
 
     /**
      * Récupère la liste des personas
@@ -47,32 +43,38 @@ interface PersonaManipulationInterfaceController
      * @param $id
      * @return Persona - objet Persona
      * @test testRecupererUnPersona()
-     * @throws Exception
+     * @throws PersonaException
      */
-    public function recupererUnPersona($id);
+    public function recupererUnPersona($id) : Persona;
 
-    public function genererIdPersona();
+    /**
+     * récupère un id non utilisé dans le fichier des personas
+     * @return int
+     * @test testGenererIdPersona()
+     */
+    public function genererIdPersona() : int;
     /** --------------------> AJOUT <--------------------**/
 
     /**
      * Ajoute un persona dans le fichier json
      * @param $persona
+     * @test testAjouterUnPersonaAuFichierJson()
      */
-    public function ajouterUnPersonaAuFichierJson($persona);
+    public function ajouterUnPersonaAuFichierJson(Persona $persona) : void;
 
     /** --------------------> MODIFICATION <--------------------**/
     /**
      * Modifie un persona dans le fichier json
      * @param Persona $persona
      */
-    public function modifierUnPersonaAuFichierJson(Persona $persona);
+    public function modifierUnPersonaAuFichierJson(Persona $persona) : void;
 
     /** --------------------> SUPPRESSION <--------------------**/
     /**
      * Supprime un persona dans le fichier json
      * @param Persona $persona
      */
-    public function supprimerUnPersonaDuFichierJson(Persona $persona);
+    public function supprimerUnPersonaDuFichierJson(Persona $persona) : void;
 
 
 

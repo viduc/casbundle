@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use Viduc\CasBundle\Controller\PersonaPhotoController;
 use Symfony\Component\Filesystem\Filesystem;
 
+define('PHOTO_TEST', '/tmp/photo-test.jpeg');
+
 class PersonaPhotoControllerTest extends TestCase
 {
     protected $personaPhoto;
@@ -15,7 +17,7 @@ class PersonaPhotoControllerTest extends TestCase
     private $ressource;
     protected $filesystem;
 
-    protected function setUp(): void
+    final protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
         $this->kernel = $this->createMock(Kernel::class);
@@ -29,7 +31,7 @@ class PersonaPhotoControllerTest extends TestCase
 
 
     /** --------------------> LECTURE <--------------------**/
-    public function testRecupererLaListeDesPhotos()
+    final public function testRecupererLaListeDesPhotos() : void
     {
         self::assertTrue(
             count($this->personaPhoto->recupererLaListeDesPhotos()) >= 2
@@ -37,16 +39,16 @@ class PersonaPhotoControllerTest extends TestCase
     }
 
     /** --------------------> AJOUT <--------------------**/
-    public function testEnregistrerPhoto()
+    final public function testEnregistrerPhoto() : void
     {
         if (!file_exists(
-            $this->ressource.'/tmp/photo-test.jpeg'
+            $this->ressource . PHOTO_TEST
         ) && file_exists(
             $this->ressource.'/tmp/phpunit.jpeg'
         )) {
             $this->filesystem->copy(
                 $this->ressource.'/tmp/phpunit.jpeg',
-                $this->ressource.'/tmp/photo-test.jpeg'
+                $this->ressource . PHOTO_TEST
             );
         }
         if (file_exists(
@@ -56,19 +58,19 @@ class PersonaPhotoControllerTest extends TestCase
         }
 
         $photo = new File(
-            $this->kernel->getProjectDir() . '/tmp/photo-test.jpeg'
+            $this->kernel->getProjectDir() . PHOTO_TEST
         );
         self::assertEquals(
             '/images/personas/test.jpeg',
-            $this->personaPhoto->enregistrerPhoto($photo, 'test', '')
+            $this->personaPhoto->enregistrerPhoto('test', '', $photo)
         );
         self::assertEquals(
             '/images/personas/nc.jpeg',
-            $this->personaPhoto->enregistrerPhoto(null, 'test', '')
+            $this->personaPhoto->enregistrerPhoto('test', '', null)
         );
         self::assertEquals(
             'test',
-            $this->personaPhoto->enregistrerPhoto(null, 'test', 'test')
+            $this->personaPhoto->enregistrerPhoto('test', 'test', null)
         );
     }
 

@@ -4,17 +4,12 @@ namespace Viduc\CasBundle\Controller;
 
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Viduc\CasBundle\Entity\Persona;
 use Viduc\CasBundle\Form\PersonaType;
 
@@ -33,7 +28,23 @@ class PersonaController extends AbstractController
         $this->session = $session;
     }
 
-    public function index()
+    /**
+     * Permet de passer le controller PersonaManipulation
+     * @param PersonaManipulationInterfaceController $controller
+     * @codeCoverageIgnore
+     */
+    final public function setPersonManipulation(
+        PersonaManipulationInterfaceController $controller
+    ) : void {
+        $this->personaManipulation = $controller;
+    }
+
+    /**
+     * Vue principale
+     * @return Response
+     * @codeCoverageIgnore
+     */
+    final public function index() : Response
     {
         return $this->render('@Cas/persona/index.html.twig', [
             'personas' => $this->personaManipulation->recupererLesPersonas(),
@@ -45,8 +56,9 @@ class PersonaController extends AbstractController
      * @param Request $request
      * @return Response
      * @throws Exception
+     * @codeCoverageIgnore
      */
-    public function ajouterUnPersona(Request $request)
+    final public function ajouterUnPersona(Request $request) : Response
     {
         $form = $this->creerLeFormulairePersona($request);
         return $this->render(
@@ -65,8 +77,9 @@ class PersonaController extends AbstractController
      * @param int $id
      * @return Response
      * @throws Exception
+     * @codeCoverageIgnore
      */
-    public function modifierUnPersona(request $request, int $id)
+    final public function modifierUnPersona(request $request, int $id) : Response
     {
         $form = $this->creerLeFormulairePersona($request, $id);
         return $this->render(
@@ -82,9 +95,11 @@ class PersonaController extends AbstractController
     /**
      * Supprime un persona
      * @param int $id
+     * @return RedirectResponse
      * @throws Exception
+     * @codeCoverageIgnore
      */
-    public function supprimerUnPersona(int $id)
+    final public function supprimerUnPersona(int $id) : RedirectResponse
     {
         $this->personaManipulation->supprimerUnPersonaDuFichierJson(
             $this->personaManipulation->recupererUnPersona($id)
@@ -99,11 +114,12 @@ class PersonaController extends AbstractController
      * @param int|null $id
      * @return FormView | Response
      * @throws Exception
+     * @codeCoverageIgnore
      */
-    public function creerLeFormulairePersona(
+    final public function creerLeFormulairePersona(
         Request $request,
         int $id = null
-    ): FormView {
+    ) {
         $persona = new Persona();
         if ($id) {
             $persona = $this->personaManipulation->recupererUnPersona($id);
@@ -112,9 +128,9 @@ class PersonaController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $photo = $this->personaPhoto->enregistrerPhoto(
-                $form->get('photo')->getData(),
                 $form->getData()->getUsername(),
-                $form->getData()->getUrlPhoto()
+                $form->getData()->getUrlPhoto(),
+                $form->get('photo')->getData()
             );
             $persona = $form->getData();
             $persona->setUrlPhoto($photo);
@@ -139,9 +155,9 @@ class PersonaController extends AbstractController
      * permet de se connecter avec un persona
      * @param $id
      * @return RedirectResponse
-     * @test testSeConnecter()
+     * test testSeConnecter()
      */
-    public function seConnecter($id): ?RedirectResponse
+    final public function seConnecter(int $id): ?RedirectResponse
     {
         try {
             $persona = $this->personaManipulation->recupererUnPersona($id);
@@ -162,17 +178,13 @@ class PersonaController extends AbstractController
     /**
      * Restaure la session d'origine
      * @return RedirectResponse
-     * @test testRestaurerEnTantQue()
+     * test testRestaurerEnTantQue()
      */
-    public function restaurerEnTantQue(): RedirectResponse
+    final public function restaurerEnTantQue(): RedirectResponse
     {
         $this->session->set('enTantQue.restaurer', true);
         /* @codeCoverageIgnoreStart */
         return $this->redirect('persona');
         /* @codeCoverageIgnoreEnd */
     }
-
-
-
-
 }

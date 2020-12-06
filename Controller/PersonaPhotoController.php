@@ -5,6 +5,7 @@ namespace Viduc\CasBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\File\File;
 
 class PersonaPhotoController extends AbstractController implements PersonaPhotoInterfaceController
 {
@@ -22,10 +23,10 @@ class PersonaPhotoController extends AbstractController implements PersonaPhotoI
     /** --------------------> LECTURE <--------------------**/
     /**
      * récupère la listes des photos enregistrées dans le dossier personas
-     * @return array testRecupererLaListeDesPhotos()
-     * @test
+     * @return array
+     * @test testRecupererLaListeDesPhotos()
      */
-    public function recupererLaListeDesPhotos()
+    final public function recupererLaListeDesPhotos() : Array
     {
         $finder = new Finder();
         $dossierHomme = '/public/bundles/cas/images/personas/hommes';
@@ -56,16 +57,19 @@ class PersonaPhotoController extends AbstractController implements PersonaPhotoI
      * Si un fichier est présent il sera enregistrer puis son url renvoyée
      * Sinon si une url existe elle sera renvoyée
      * Sinon l'url par défaut sera renvoyée
-     * @param $file
-     * @param $username
-     * @param $urlPhoto
+     * @param String $username
+     * @param String $urlPhoto
+     * @param File|null $file
      * @return String - le path du fichier, '', si aucun
      * @codeCoverageIgnore
      */
-    public function enregistrerPhoto($file, $username, $urlPhoto)
-    {
+    final public function enregistrerPhoto(
+        String $username,
+        String $urlPhoto,
+        File $file = null
+    ) :String {
         $retour = '/images/personas/nc.jpeg';
-        if ($file && file_exists($file)) {var_dump('vvvvv');
+        if ($file && file_exists($file)) {
             $dossier = '/public/images/personas';
             $name = $username . '.' .$file->guessExtension();
             $file->move(
@@ -81,16 +85,4 @@ class PersonaPhotoController extends AbstractController implements PersonaPhotoI
         return $retour;
     }
     /** --------------------> MODIFICATION <--------------------**/
-
-
-
-
-
-
-
-
-
-
-
-
 }

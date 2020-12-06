@@ -86,8 +86,8 @@ CONFIGURATION
 	Par défaut le système utilisera la class CasUser en renseignant le login
 	récupéré par le cas et en attribuant les roles *user* et *entantque*.
 	Pour implémenter votre logique de chargement d'un utilisateur,
-	vous devez créer une class UserProvider.php dans le dossier Security
-	(créer le dossier s'i i'l n'existe pas) situé dans src (App).
+	vous devez créer une class (par ex: UserPersoProvider.php) dans le dossier Security
+	(créer le dossier s'il n'existe pas) situé dans src (App).
 	Cette class doit étendre la class Viduc/CasBundle/Security/UserProvider.php.
 	Vous devrez ensuite surcharger la méthode:
 	`chargerUtilisateurParSonLogin($username)`
@@ -163,7 +163,7 @@ CONFIGURATION
         ```yaml
             providers:
                 viduc_provider:
-                    id: App\Security\UserProvider
+                    id: App\Security\UserPersoProvider
         ```
     7. *Test*: Si vous voulez tester rapidement le fonctionnement de l'authentification CAS,
     ajoutez au fichier routes.yaml de votre dossier config cette ligne:

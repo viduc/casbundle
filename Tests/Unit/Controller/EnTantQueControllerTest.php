@@ -8,18 +8,25 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
+define('TABROLES', ['ROLE_USER']);
+define('ETQ_USER', 'enTantQue.users');
+
 class EnTantQueControllerTest extends TestCase
 {
     protected $session;
     protected $enTantQue;
 
-    protected function setUp(): void
+    final protected function setUp(): void
     {
         $this->session = new Session(new MockArraySessionStorage());
         $this->enTantQue = new EnTantQueController($this->session);
     }
 
-    public function creerUser($username,$roles)
+    /**
+     * @param String $username
+     * @param array $roles
+     */
+    final public function creerUser(String $username, Array $roles) : CasUser
     {
         $user = new CasUser();
         $user->setUsername($username);
@@ -28,15 +35,15 @@ class EnTantQueControllerTest extends TestCase
         return $user;
     }
 
-    public function testGenererLeTableauDesUtilisateurs()
+    final public function testGenererLeTableauDesUtilisateurs() : void
     {
         self::assertCount(
             0,
             $this->enTantQue->genererLeTableauDesUtilisateurs()
         );
         $this->session->set(
-            'enTantQue.users',
-            [$this->creerUser('test', ['ROLE_USER'])]
+            ETQ_USER,
+            [$this->creerUser('test', TABROLES)]
         );
         self::assertCount(
             1,
@@ -44,14 +51,14 @@ class EnTantQueControllerTest extends TestCase
         );
     }
 
-    public function testRecupererLeTableauDesUtilisateursEnSession()
+    final public function testRecupererLeTableauDesUtilisateursEnSession() : void
     {
         self::assertEmpty(
             $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
         );
         $this->session->set(
-            'enTantQue.users',
-            [$this->creerUser('test', ['ROLE_USER'])]
+            ETQ_USER,
+            [$this->creerUser('test', TABROLES)]
         );
         self::assertIsArray(
             $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
@@ -61,8 +68,8 @@ class EnTantQueControllerTest extends TestCase
             $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
         );
         $this->session->set(
-            'enTantQue.users',
-            [$this->creerUser('test', ['ROLE_USER']), 'test']
+            ETQ_USER,
+            [$this->creerUser('test', TABROLES), 'test']
         );
         self::assertIsArray(
             $this->enTantQue->recupererLeTableauDesUtilisateursEnSession()
@@ -73,7 +80,7 @@ class EnTantQueControllerTest extends TestCase
         );
     }
 
-    public function testRestaurerEnTantQue()
+    final public function testRestaurerEnTantQue() : void
     {
         $this->enTantQue->restaurerEnTantQue();
         self::assertTrue(

@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+    {% block stylesheets %}
+        <!--Bootstrap-->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+        <!--Latest stable release of jQuery Core Library-->
+        <script src="https://code.jquery.com/jquery-1.12.2.min.js" integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk=" crossorigin="anonymous"></script>
+
+        <!--Bootstrap JS-->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+
+        </script>
+        <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.0.1/css/all.css"
+            type="text/css"
+            media="screen"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ asset('bundles/cas/css/persona_ajout.css') }}"
+            type="text/css"
+            media="screen"
+        />
+        <script
+            type="text/javascript"
+            src="{{ asset('bundles/cas/js/persona.js') }}" >
+        </script>
+    {% endblock %}
+{% block title %}Persona - Ajout{% endblock %}
+{% block body %}
+    <!--begin modal window-->
+    {% include '@Cas/persona/modalPhoto.html.twig' %}
+    <div class='signup-container'>
+        <div class='left-container'>
+            <h1>
+                <i class='fas fa-address-card' id='upload'></i>Persona
+            </h1>
+            {% if photoPersona is defined %}
+                <div class="persona__photo" data-toggle="modal" data-target="#modalPhoto">
+                    <div class='persona-label' style="padding-right: 120px">
+                        <img id="photoPersona" src="{{ asset(photoPersona) }}" alt="persona" style="width: 290px; padding-left: 10px">
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class='puppy'>
+                <img src="{{ asset(
+                    'bundles/cas/images/personas/persona.png'
+                ) }}" alt="persona">
+            </div>
+        </div>
+        <div class='right-container'>
+            <header>
+            <div class='set'>
+                {{ form_start(form) }}
+                {% if form_errors(form.photo) %}
+                    <div class="error">{{ form_errors(form.photo) }}</div>
+                {% endif %}
+            </div>
+            <div class='set'>
+                <div class='persona-label' style="text-align: center">
+                    {{ form_widget(
+                        form.photo,
+                        {'attr':{'placeholder': "photo", 'style': "display:none"}}
+                    ) }}
+                    {{ form_widget(form.urlPhoto) }}
+                </div>
+            </div>
+            <div class='set'>
+                <div class='persona-label'>
+                    <label for='username' class="requis">Login</label>
+                    {{ form_widget(
+                        form.username,
+                        {'attr':{'placeholder': "login"}}
+                    ) }}
+                </div>
+            </div>
+            <div class='set'>
+                <div class='persona-label'>
+                    <label for='prenom' class="requis">Prénom</label>
+                    {{ form_widget(
+                        form.prenom,
+                        {'attr':{'placeholder': "prenom"}}
+                    ) }}
+                </div>
+                <div class='persona-label'>
+                    <label for='nom' class="requis">Nom</label>
+                    {{ form_widget(
+                        form.nom,
+                        {'attr':{'placeholder': "nom"}}
+                    ) }}
+                </div>
+            </div>
+                <div class='set'>
+                    <div class='persona-label'>
+                        <label for='age' class="requis">Age</label>
+                        {{ form_widget(
+                            form.age,
+                            {'attr':{'placeholder': "age"}}
+                        ) }}
+                    </div>
+                    <div class='persona-label'>
+                        <label for='lieu' class="requis">Lieu</label>
+                        {{ form_widget(
+                            form.lieu,
+                            {'attr':{'placeholder': "lieu"}}
+                        ) }}
+                    </div>
+                </div>
+                <div class='set'>
+                    <div class='persona-label'>
+                        <label for='metier' class="requis">Métier</label>
+                        {{ form_widget(
+                            form.metier,
+                            {'attr':{'placeholder': "metier"}}
+                        ) }}
+                    </div>
+                    <div class='persona-label'>
+                        <label for='citation' class="requis">Citation</label>
+                        {{ form_widget(
+                            form.citation,
+                            {'attr':{'placeholder': "citation"}}
+                        ) }}
+                    </div>
+                </div>
+                <div class='set'>
+                    <div class='persona-label'>
+                        <label for='histoire' class="requis">Histoire</label>
+                        {{ form_widget(
+                            form.histoire,
+                            {'attr':{'placeholder': "histoire", "class" : "textarea"}}
+                        ) }}
+                    </div>
+                </div>
+                <br>
+                <div class='set'>
+                    <div class='pets-weight'>
+                        <label for='pet-weight-0-25'>Aisance numérique</label>
+                        <div class='radio-container'>
+                            {{ form_widget(
+                                form.aisanceNumerique,
+                                {'attr':{'placeholder': "aisance numérique"}}
+                            ) }}
+                        </div>
+                    </div>
+                </div>
+                <div class='set'>
+                    <div class='pets-weight'>
+                        <label for='pet-weight-0-25'>Expertise du domaine</label>
+                        <div class='radio-container'>
+                            {{ form_widget(
+                                form.expertiseDomaine,
+                                {'attr':{'placeholder': "expertise du domaine"}}
+                            ) }}
+                        </div>
+                    </div>
+                </div>
+                <div class='set'>
+                    <div class='pets-weight'>
+                        <label for='pet-weight-0-25'>Fréquence d'usage</label>
+                        <div class='radio-container'>
+                            {{ form_widget(
+                                form.frequenceUsage,
+                                {'attr':{'placeholder': "fréquence d'usage"}}
+                            ) }}
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <footer>
+                <div class='set'>
+                    {{ form_widget(form.save) }}
+                    {{ form_end(form) }}
+                    <button
+                        id='back'
+                        onclick="window.location.href='{{ url('personaIndex') }}';">
+                        Retour
+                    </button>
+
+                </div>
+            </footer>
+        </div>
+    </div>
+
+{% endblock %}

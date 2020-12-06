@@ -2,48 +2,55 @@
 
 namespace Viduc\CasBundle\Tests\Unit\Controller;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Kernel;
 use Viduc\CasBundle\Controller\PersonaController;
 use PHPUnit\Framework\TestCase;
+use Viduc\CasBundle\Controller\PersonaManipulationInterfaceController;
+use Viduc\CasBundle\Tests\Unit\Persona\DonnesDeTest;
 
 class PersonaControllerTest extends TestCase
 {
-    //protected $session;
     protected $persona;
     protected $kernel;
-    private $ressource;
+    protected $session;
+    protected $ressource;
+    protected $personaManipulation;
+    protected $donneesDeTest;
 
-    protected function setUp(): void
+    final protected function setUp(): void
     {
-        //$this->session = new Session(new MockArraySessionStorage());
-        /*$this->kernel = $this->createMock(Kernel::class);
-        $this->ressource = './Tests/Unit/Ressources';
+        $this->session = new Session(new MockArraySessionStorage());
+        $this->kernel = $this->createMock(Kernel::class);
+        $dir = __DIR__;
+        $this->ressource = str_replace("Controller", 'Ressources', $dir);
         $this->kernel->method('getProjectDir')->willReturn($this->ressource);
-        $this->persona = new PersonaController($this->kernel);
-        unlink($this->ressource.'/public/bundles/cas/personas/personas.json');*/
+        $this->persona = new PersonaController($this->session, $this->kernel);
+        $this->personaManipulation = $this->createMock(
+            PersonaManipulationInterfaceController::class
+        );
+        $this->persona->setPersonManipulation($this->personaManipulation);
+        $this->donneesDeTest = new DonnesDeTest();
     }
 
-    /*public function testCreerLeFichierPersonaSiInexistant()
+    final public function testSeConnecter() : void
     {
-        $this->assertNull(
-            $this->persona->creerLeFichierPersonaSiInexistant()
+        $this->personaManipulation->method('recupererUnPersona')->willReturn(
+            $this->donneesDeTest->genererUnPersona()
+        );
+        $this->persona->seConnecter(1);
+        self::assertSame(
+            'username1',
+            $this->session->get('enTantQue.seConnecter')
         );
     }
 
-    public function testRecupererLesPersonas()
+    final public function testRestaurerEnTantQue() : void
     {
-        fopen(
-            $this->ressource.'/public/bundles/cas/personas/personas.json',
-            'wb'
+        $this->persona->restaurerEnTantQue();
+        self::assertTrue(
+            $this->session->get('enTantQue.restaurer')
         );
-
-        $this->assertSame(
-            count($this->persona->recupererLesPersonas()), 0
-        );
-        unlink($this->ressource.'/public/bundles/cas/personas/personas.json');
-        $this->persona->creerLeFichierPersonaSiInexistant();
-        $this->assertTrue(
-            count($this->persona->recupererLesPersonas()) >= 2
-        );
-    }*/
+    }
 }

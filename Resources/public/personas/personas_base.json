@@ -2,20 +2,27 @@
   "personas":
   [
     {
-      "id": 1, "nom":  "le nom", "prenom":  "le prenom", "age": 32,
-      "lieu":  "le lieu", "aisanceNumerique":  5, "expertiseDomaine": 2,
-      "frequenceUsage": 3, "metier": "le métier", "citation":  "la citation",
-      "histoire": "le lieu", "buts": "les buts", "personnalite": "personalité",
-      "photo": "la photo", "urlPhoto": "l'url de la photo", "roles": "roles",
-      "isActive": true
+      "id": 1, "username": "walterw","nom": "Walter", "prenom": "White",
+      "age": 50,"lieu": "Albuquerque", "aisanceNumerique": 5,
+      "expertiseDomaine": 3, "frequenceUsage": 2,
+      "metier": "Professeur de chimie - Fabricant et trafiquant de m\u00e9thamph\u00e9tamine - Directeur dans un lave-auto",
+      "citation":  "Tu aurais du \u00e9couter pendant mes cours",
+      "histoire": "voir la s\u00e9rie", "buts": "ne pas mourir pour rien, se vanger",
+      "personnalite": "Complexe, trouble, \u00e9gocentrique",
+      "urlPhoto": "bundles\/cas\/images\/personas\/hommes\/ww.png",
+      "roles": [{"id":1,"libelle":"USER"}], "isActive": true
     },
     {
-      "id": 2, "nom":  "le nom", "prenom":  "le prenom", "age": 32,
-      "lieu":  "le lieu", "aisanceNumerique":  5, "expertiseDomaine": 2,
-      "frequenceUsage": 3, "metier": "le métier", "citation":  "la citation",
-      "histoire": "le lieu", "buts": "les buts", "personnalite": "personalité",
-      "photo": "la photo", "urlPhoto": "l'url de la photo", "roles": "roles",
-      "isActive": true
+      "id": 2, "username": "aliaa","nom": "Atr\u00e9ides", "prenom": "Alia",
+      "age": 4,"lieu":  "Arakis", "aisanceNumerique": 0,
+      "expertiseDomaine": 3, "frequenceUsage": 5,
+      "metier": "Tueuse du Baron Vladimir Harkonnen",
+      "citation": "Le couteau vaut peu contre l'esprit",
+      "histoire": "Lire Dune de Franck Herbert",
+      "buts":"Lire Dune de Franck Herbert",
+      "personnalite": "Lire Dune de Franck Herbert",
+      "urlPhoto": "bundles\/cas\/images\/personas\/femmes\/alia.jpg",
+      "roles": [{"id":1,"libelle":"USER"}], "isActive": true
     }
   ]
 }

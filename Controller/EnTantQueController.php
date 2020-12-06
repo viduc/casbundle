@@ -26,7 +26,7 @@ class EnTantQueController extends AbstractController
      * @return RedirectResponse|Response
      * @codeCoverageIgnore
      */
-    public function connecterEnTantQue(Request $request)
+    final public function connecterEnTantQue(Request $request) : RedirectResponse
     {
         $form = $this->createFormBuilder()
              ->add(
@@ -53,7 +53,7 @@ class EnTantQueController extends AbstractController
      * @return array
      * @test testGenererLeTableauPourLeChoixDesUtilisateurs()
      */
-    public function genererLeTableauDesUtilisateurs()
+    final public function genererLeTableauDesUtilisateurs() : array
     {
         $choices = [];
         foreach ($this->recupererLeTableauDesUtilisateursEnSession() as $user) {
@@ -70,7 +70,7 @@ class EnTantQueController extends AbstractController
      * @return array
      * @test testRecupererLeTableauDesUtilisateursEnSession()
      */
-    public function recupererLeTableauDesUtilisateursEnSession() : array
+    final public function recupererLeTableauDesUtilisateursEnSession() : array
     {
         if ($this->session->has(USERS)
             && is_array($this->session->get(USERS))) {
@@ -85,8 +85,12 @@ class EnTantQueController extends AbstractController
         return [];
     }
 
-
-    public function restaurerEnTantQue()
+    /**
+     * Restaure la session d'origine
+     * @return RedirectResponse
+     * @test testRestaurerEnTantQue()
+     */
+    final public function restaurerEnTantQue() : RedirectResponse
     {
         $this->session->set('enTantQue.restaurer', true);
 

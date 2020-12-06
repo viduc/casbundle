@@ -10,6 +10,26 @@ enTantQueRestore:
     path: /en_tant_que_restore
     controller: Viduc\CasBundle\Controller\EnTantQueController::restaurerEnTantQue
 
-personnaIndex:
+personaIndex:
     path: /persona
     controller: Viduc\CasBundle\Controller\PersonaController::index
+
+personaSeConnecter:
+    path: /personaSeConnecter/{id}
+    controller: Viduc\CasBundle\Controller\PersonaController::seConnecter
+
+personaRestore:
+    path: /personaRestore
+    controller: Viduc\CasBundle\Controller\PersonaController::restaurerEnTantQue
+
+personaAjouter:
+    path: /personaAjouter
+    controller: Viduc\CasBundle\Controller\PersonaController::ajouterUnPersona
+
+personaModifier:
+    path: /personaModifier/{id}
+    controller: Viduc\CasBundle\Controller\PersonaController::modifierUnPersona
+
+personaSupprimer:
+    path: /personaSuprimer/{id}
+    controller: Viduc\CasBundle\Controller\PersonaController::supprimerUnPersona

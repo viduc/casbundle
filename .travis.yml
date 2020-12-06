@@ -6,6 +6,11 @@ php:
 env:
   global:
     - CC_TEST_REPORTER_ID=6c93a972033b86464ae4d510468f04e4b3bda78f8184780b8af0b6d6d7aa8600
+addons:
+  sonarcloud:
+    organization: "viduc"
+    token:
+      secure: "6c93a972033b86464ae4d510468f04e4b3bda78f8184780b8af0b6d6d7aa8600"
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
@@ -21,6 +26,7 @@ script:
   - composer require symfony/serializer
   - composer require symfony/property-access
   - vendor/bin/phpunit --coverage-clover=clover.xml
+  - sonar-scanner
 after_script:
   - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
   - cp clover.xml coverage.xml

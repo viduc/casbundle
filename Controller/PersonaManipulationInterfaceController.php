@@ -45,7 +45,7 @@ interface PersonaManipulationInterfaceController
      * @test testRecupererUnPersona()
      * @throws PersonaException
      */
-    public function recupererUnPersona($id) : Persona;
+    public function recupererUnPersona($id);
 
     /**
      * récupère un id non utilisé dans le fichier des personas

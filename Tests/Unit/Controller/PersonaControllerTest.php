@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Kernel;
 use Viduc\CasBundle\Controller\PersonaController;
 use PHPUnit\Framework\TestCase;
 use Viduc\CasBundle\Controller\PersonaManipulationInterfaceController;
+use Viduc\CasBundle\Exception\PersonaException;
 use Viduc\CasBundle\Tests\Unit\Persona\DonnesDeTest;
 
 class PersonaControllerTest extends TestCase
@@ -32,18 +33,6 @@ class PersonaControllerTest extends TestCase
         );
         $this->persona->setPersonManipulation($this->personaManipulation);
         $this->donneesDeTest = new DonnesDeTest();
-    }
-
-    final public function testSeConnecter() : void
-    {
-        $this->personaManipulation->method('recupererUnPersona')->willReturn(
-            $this->donneesDeTest->genererUnPersona()
-        );
-        $this->persona->seConnecter(1);
-        self::assertSame(
-            'username1',
-            $this->session->get('enTantQue.seConnecter')
-        );
     }
 
     final public function testRestaurerEnTantQue() : void

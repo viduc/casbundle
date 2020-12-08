@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Viduc\CasBundle\Entity\Persona;
+use Viduc\CasBundle\Exception\PersonaException;
 use Viduc\CasBundle\Form\PersonaType;
 
 class PersonaController extends AbstractController
@@ -19,6 +20,12 @@ class PersonaController extends AbstractController
     protected $personaManipulation;
     protected $personaPhoto;
 
+    /**
+     * PersonaController constructor.
+     * @param SessionInterface $session
+     * @param KernelInterface $kernel
+     * @codeCoverageIgnore
+     */
     public function __construct(
         SessionInterface $session,
         KernelInterface $kernel
@@ -155,23 +162,19 @@ class PersonaController extends AbstractController
      * permet de se connecter avec un persona
      * @param $id
      * @return RedirectResponse
-     * test testSeConnecter()
+     * @codeCoverageIgnore
      */
     final public function seConnecter(int $id): ?RedirectResponse
     {
         try {
             $persona = $this->personaManipulation->recupererUnPersona($id);
             $this->session->set('enTantQue.seConnecter', $persona->getUsername());
-            /* @codeCoverageIgnoreStart */
             return $this->redirect('persona');
-            /* @codeCoverageIgnoreEnd */
-        } catch (Exception $e) {
-            /* @codeCoverageIgnoreStart */
+        } catch (PersonaException $e) {
             $this->addFlash(
                 'error',
                 'Impossible de se connecter avec ce persona'
             );
-            /* @codeCoverageIgnoreStart */
         }
     }
 

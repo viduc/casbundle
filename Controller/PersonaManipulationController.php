@@ -112,7 +112,7 @@ class PersonaManipulationController extends AbstractController implements Person
      * @test testRecupererUnPersona()
      * @throws PersonaException
      */
-    final public function recupererUnPersona($id) : Persona
+    final public function recupererUnPersona($id)
     {
         $personas = $this->recupererLesPersonas();
         foreach ($personas as $persona) {

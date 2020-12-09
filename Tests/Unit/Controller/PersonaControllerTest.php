@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\Kernel;
 use Viduc\CasBundle\Controller\PersonaController;
 use PHPUnit\Framework\TestCase;
 use Viduc\CasBundle\Controller\PersonaManipulationInterfaceController;
-use Viduc\CasBundle\Exception\PersonaException;
 use Viduc\CasBundle\Tests\Unit\Persona\DonnesDeTest;
 
 class PersonaControllerTest extends TestCase

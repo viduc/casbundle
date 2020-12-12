@@ -24,7 +24,7 @@ script:
 - composer require symfony/serializer
 - composer require symfony/property-access
 - vendor/bin/phpunit --coverage-clover=clover.xml
-- sonar-scanner
+- sonar-scanner -X
 after_script:
 - "./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT"
 - cp clover.xml coverage.xml

@@ -11,8 +11,9 @@ use Symfony\Component\Serializer\Serializer;
 use Viduc\CasBundle\Entity\Persona;
 use Viduc\CasBundle\Exception\PersonaException;
 
+/* @codeCoverageIgnoreStart */
 define("PERSONA_JSON", '/public/file/personas.json');
-
+/* @codeCoverageIgnoreEnd */
 class PersonaManipulationController extends AbstractController implements PersonaManipulationInterfaceController
 {
     private $kernel;

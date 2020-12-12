@@ -62,7 +62,7 @@ jobs:
 
       # run tests with phpunit or codecept
       - run: sudo pecl channel-update pecl.php.net
-      - run: sudo sudo docker-php-ext-enable xdebug
+      - run: sudo docker-php-ext-enable xdebug
       - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter
       - run: sudo mkdir -p $CIRCLE_TEST_REPORTS/phpunit

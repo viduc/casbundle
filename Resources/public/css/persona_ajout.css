@@ -15,7 +15,7 @@ body {
     font-weight: 400;
     height: 100vh;
     justify-items: center;
-    weight: 100vw;
+    width: 100vw;
 }
 
 .signup-container {

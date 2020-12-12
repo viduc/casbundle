@@ -42,10 +42,10 @@ jobs:
       - run: composer require symfony/serializer
       - run: composer require symfony/property-access
 
-      #- save_cache:
-      #    key: v1-dependencies-{{ checksum "composer.json" }}
-      #    paths:
-      #      - ./vendor
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
       #- restore_cache:
       #    keys:
       #      - node-v1-{{ checksum "package.json" }}
@@ -62,7 +62,7 @@ jobs:
 
       # run tests with phpunit or codecept
       - run: sudo pecl channel-update pecl.php.net
-      - run: sudo pecl install xdebug && sudo docker-php-ext-enable xdebug
+      - run: sudo sudo docker-php-ext-enable xdebug
       - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter
       - run: sudo mkdir -p $CIRCLE_TEST_REPORTS/phpunit

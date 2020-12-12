@@ -64,6 +64,7 @@ jobs:
       - run: sudo pecl channel-update pecl.php.net
       - run: sudo docker-php-ext-enable xdebug
       - run: php --ini
+      - run: php -v
       #- run: echo “zend_extension=/wherever/you/put/it/xdebug” >> /opt/circleci/php/$(phpenv global)/etc/php.ini
       - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter

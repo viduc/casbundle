@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # Specify the version you desire here
-      - image: circleci/php:7.2-node-browsers
+      - image: circleci/php:7.2.0-apache
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -63,6 +63,7 @@ jobs:
       # run tests with phpunit or codecept
       - run: sudo pecl channel-update pecl.php.net
       - run: sudo docker-php-ext-enable xdebug
+      - run: echo “zend_extension=/wherever/you/put/it/xdebug” >> /opt/circleci/php/$(phpenv global)/etc/php.ini
       - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter
       - run: sudo mkdir -p $CIRCLE_TEST_REPORTS/phpunit

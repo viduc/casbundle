@@ -6,6 +6,11 @@ php:
 env:
   global:
     - CC_TEST_REPORTER_ID=6c93a972033b86464ae4d510468f04e4b3bda78f8184780b8af0b6d6d7aa8600
+addons:
+  sonarcloud:
+    organization: "viduc"
+    token:
+      secure: "U1wmU4nwj/J75/o811npIVjrHZoBk+kT9EmtIYL7PiB9cIKEa/cegV6er8j/zpKISav1+BOmgaV1OhYjL2bEScePDHwR8ITSaoYrK3dXNmXP4v0eH/qcc2HxEMTADxZkFGm3MWPoruBDavjMGIzx8XUK2EKLK3rC7JchxpF9Wbkys9DWBTATRjcauAfnVGo2ZAWNNeg/re+p88ZaMUtd//BxkZuyWCKC3aQmmZ6Ag3j608P8YFE3gnInu2F/f+7Fk1atGzHOEYH74Vu4ttrQrD427A9q86rdPHa4avoF/cAr6dKSt/mCodKzqc2GJr04EQnHl0HD/oG3T13ytrVBjFLobFircHGPneMPottKXy7ZQpwm/WDYCoHa7UPpwxEI1qJRhYevRHmYQNTJqvkgoEsfToQf9XKE8kzgz6zigm6KGfK4QEQB0OMaK5hRwNhYcOh9Qt7Hx6yZ8dVYh/ijUqLpclvHX/cYfhaGVzyTouE2BFxox8E6e/EWb8BZKYGlSxOJ/HHvHlBdz1vk7z4c7Kfiwz4J7aRzGpVzQP8NsOpasFFZ5NwwwR48arGcDPHgHjabj/UQRcO03efawwNauKzYlptrqErdL7nrmFoZSQYEAkx1/YTHlera12ycYyEkO+Yb1twgfW66eDVezSHuBMZnsVBpehUsdIL1xnddPBU="
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
@@ -22,6 +27,7 @@ script:
   - composer require symfony/serializer
   - composer require symfony/property-access
   - vendor/bin/phpunit --coverage-clover=clover.xml
+  - sonar-scanner
 after_script:
   - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
   - cp clover.xml coverage.xml

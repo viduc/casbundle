@@ -42,25 +42,32 @@ jobs:
       - run: composer require symfony/serializer
       - run: composer require symfony/property-access
 
-      - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
-          paths:
-            - ./vendor
-      - restore_cache:
-          keys:
-            - node-v1-{{ checksum "package.json" }}
-            - node-v1-
-      - run: yarn install
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
-          paths:
-            - node_modules
+      #- save_cache:
+      #    key: v1-dependencies-{{ checksum "composer.json" }}
+      #    paths:
+      #      - ./vendor
+      #- restore_cache:
+      #    keys:
+      #      - node-v1-{{ checksum "package.json" }}
+      #      - node-v1-
+      #- run: yarn install
+      #- save_cache:
+      #    key: node-v1-{{ checksum "package.json" }}
+      #    paths:
+      #      - node_modules
 
       # prepare the database
       #- run: touch storage/testing.sqlite
       #- run: php artisan migrate --env=testing --database=sqlite_testing --force
 
       # run tests with phpunit or codecept
+      - run: sudo pecl channel-update pecl.php.net
+      - run: sudo pecl install xdebug && sudo docker-php-ext-enable xdebug
+      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - run: chmod +x ./cc-test-reporter
+      - run: sudo mkdir -p $CIRCLE_TEST_REPORTS/phpunit
+      - run: ./cc-test-reporter before-build
       - run: ./vendor/bin/phpunit --coverage-clover=clover.xml
+      - run: ./cc-test-reporter after-build -t clover --exit-code $?
       #- run: ./vendor/bin/codecept build
       #- run: ./vendor/bin/codecept run

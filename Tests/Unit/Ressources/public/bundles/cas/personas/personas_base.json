@@ -6,7 +6,7 @@
       "lieu":  "le lieu", "aisanceNumerique":  5, "expertiseDomaine": 2,
       "frequenceUsage": 3, "metier": "le métier", "citation":  "la citation",
       "histoire": "le lieu", "buts": "les buts", "personnalite": "personalité",
-      "photo": "la photo", "urlPhoto": "l'url de la photo", "roles": "roles",
+      "photo": "la photo", "urlPhoto": "l'url de la photo", "roles": ["roles"],
       "isActive": true, "username": "username1"
     },
     {
@@ -14,7 +14,7 @@
       "lieu":  "le lieu", "aisanceNumerique":  5, "expertiseDomaine": 2,
       "frequenceUsage": 3, "metier": "le métier", "citation":  "la citation",
       "histoire": "le lieu", "buts": "les buts", "personnalite": "personalité",
-      "photo": "la photo", "urlPhoto": "l'url de la photo", "roles": "roles",
+      "photo": "la photo", "urlPhoto": "l'url de la photo", "roles": ["roles"],
       "isActive": true, "username": "username2"
     }
   ]

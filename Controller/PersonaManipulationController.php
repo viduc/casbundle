@@ -154,8 +154,8 @@ class PersonaManipulationController extends AbstractController implements Person
     final public function ajouterUnPersonaAuFichierJson(Persona $persona) : void
     {
         $persona->setId($this->genererIdPersona());
-        $persona->setButs('');//TODO à revoir
-        $persona->setPersonnalite('');//TODO à revoir
+        //$persona->setButs('');
+        //$persona->setPersonnalite('');
         $liste = $this->recupererLesPersonas();
         $liste[] = $persona;
         $this->enregistrerLaListeDesPersonasDansLeFichierJson($liste);

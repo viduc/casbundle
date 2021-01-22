@@ -15,56 +15,57 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 use Viduc\CasBundle\Entity\Persona;
 
+define('REQUIRED', 'required');
+define('CHOICES', 'choices');
+define('EXPANDED', 'expanded');
+define('DATA', 'data');
+define('REQUIS', [REQUIRED => true]);
+define('PAS_REQUIS', [REQUIRED => false]);
+
 class PersonaType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $tabValeur = [1 => '1', 2 => '2', 3 => "3", 4 => '4', 5 => '5'];
-        $photos = ['test1' => 'test1', 'test2' => 'test2', 'test3' => "test3", 'test4' => 'test4', 'test5' => 'test5'];
         $builder
-            ->add('username', null, ['required' =>true])
-            ->add('prenom', TextType::class, [
-                'required' => true
+            ->add('username', null, REQUIS)
+            ->add('prenom', TextType::class, REQUIS)
+            ->add('nom', TextType::class, REQUIS)
+            ->add('age', IntegerType::class, REQUIS)
+            ->add('lieu', TextType::class, REQUIS)
+            ->add('aisanceNumerique', ChoiceType::class, [
+                CHOICES  => $tabValeur,
+                EXPANDED => true,
+                'empty_data' => '1'
             ])
-            ->add('nom', TextType::class, [
-                'required' => true
+            ->add('expertiseDomaine', ChoiceType::class, [
+                CHOICES  => $tabValeur,
+                EXPANDED => true
             ])
-            ->add('age', IntegerType::class, [
-                'required' => true
+            ->add('frequenceUsage', ChoiceType::class, [
+                CHOICES  => $tabValeur,
+                EXPANDED => true
             ])
-            ->add('lieu', TextType::class, [
-                'required' => true
-            ])
-            ->add('aisanceNumerique',ChoiceType::class, [
-                'choices'  => $tabValeur,
-                'expanded' => true,
-                'data' => '1',
-            ])
-            ->add('expertiseDomaine',ChoiceType::class, [
-                'choices'  => $tabValeur,
-                'expanded' => true,
-                'data' => '1',
-            ])
-            ->add('frequenceUsage',ChoiceType::class, [
-                'choices'  => $tabValeur,
-                'expanded' => true,
-                'data' => '1',
-            ])
-            ->add('metier', TextType::class, [
-                'required' => true
-            ])
-            ->add('citation', TextType::class, [
-                'required' => true
-            ])
+            ->add('metier', TextType::class, REQUIS)
+            ->add('citation', TextType::class, REQUIS)
+            ->add(
+                'buts',
+                TextType::class,
+                [REQUIRED => false, 'attr' => array('readonly' => true)]
+            )
+            ->add(
+                'personnalite',
+                TextType::class,
+                [REQUIRED => false, 'attr' => array('readonly' => true)]
+            )
             ->add('histoire', TextareaType::class, [
                 'attr' => ['class' => 'tinymce'],
-                'required' => true
+                REQUIRED => true
             ])
             ->add('photo', FileType::class, [
                 'label' => 'Photo',
                 'mapped' => false,
-                'required' => false,
+                REQUIRED => false,
                 'attr' => ['class' => ''],
                 'constraints' => [
                     new File([
@@ -78,15 +79,20 @@ class PersonaType extends AbstractType
                      ])
                 ],
             ])
-            ->add('urlPhoto', HiddenType::class,['required' => false])
-            ->add('save', SubmitType::class)
-            /*->add('roles')*/;
+            ->add('urlPhoto', HiddenType::class,[REQUIRED => false])
+            ->add('roles', ChoiceType::class, [
+                'choices' => $options['rolesListe'],
+                'expanded'  => false, // liste déroulante
+                'multiple'  => true, // choix multiple
+            ])
+            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
            'data_class' => Persona::class,
+           'rolesListe' => null
        ]);
     }
 

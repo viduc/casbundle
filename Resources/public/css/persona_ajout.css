@@ -286,3 +286,12 @@ body {
     width: 50px;
     background-color: #C82829;
 }
+
+select[multiple] {
+    height: 1.6em;
+    vertical-align: top;
+}
+select[multiple]:focus,
+select[multiple]:active {
+    height: auto;
+}

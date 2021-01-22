@@ -88,7 +88,6 @@ class CasAuthenticator extends AbstractGuardAuthenticator
             return $userProvider->loadUserByUsername($credentials['username']);
         }
         catch (UsernameNotFoundException $e) {
-            // TODO revoir ici comment on gère ce retour
             throw new CustomUserMessageAuthenticationException(
                 $this->failMessage
             );

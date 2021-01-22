@@ -2,7 +2,6 @@
 
 namespace Viduc\CasBundle\Controller;
 
-use Exception;
 use Viduc\CasBundle\Entity\Persona;
 use Viduc\CasBundle\Exception\PersonaException;
 

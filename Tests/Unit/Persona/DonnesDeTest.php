@@ -28,7 +28,7 @@ class DonnesDeTest
         $persona->setButs('les buts');
         $persona->setPersonnalite('personalité');
         $persona->setUrlPhoto("l'url de la photo");
-        $persona->setRoles('roles');
+        $persona->setRoles(['roles']);
         $persona->setIsActive(true);
 
         return $persona;

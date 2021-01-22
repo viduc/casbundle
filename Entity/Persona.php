@@ -206,7 +206,7 @@ class Persona
         return $this;
     }
 
-    public function getRoles() {
+    public function getRoles() : array {
         if (empty($this->roles)) {
             return ['ROLE_USER'];
         }

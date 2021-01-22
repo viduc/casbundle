@@ -14,6 +14,11 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
+define('SE_CONNECTER', 'enTantQue.seConnecter');
+define('RESTAURER', 'enTantQue.restaurer');
+define('GET_USER', 'getUser');
+define('ROLE_ENTANTQUE', 'ROLE_ENTANTQUE');
+define('ROLE_USER','ROLE_USER');
 class UserProviderTest extends TestCase
 {
     protected $session;
@@ -38,14 +43,14 @@ class UserProviderTest extends TestCase
 
     public function testLoadUserByUsername()
     {
-        $this->session->set('enTantQue.restaurer', true);
+        $this->session->set(RESTAURER, true);
         self::assertInstanceOf(
             UserInterface::class,
             $this->provider->loadUserByUsername('test')
         );
-        $this->session->set('enTantQue.seConnecter', 'test');
-        $this->security->method('getUser')->willReturn(
-            $this->creerUser('test',['ROLE_ENTANTQUE'])
+        $this->session->set(SE_CONNECTER, 'test');
+        $this->security->method(GET_USER)->willReturn(
+            $this->creerUser('test',[ROLE_ENTANTQUE])
         );
         self::assertInstanceOf(
             UserInterface::class,
@@ -55,7 +60,7 @@ class UserProviderTest extends TestCase
 
     public function testRefreshUser()
     {
-        $user = $this->creerUser('test', ['ROLE_USER']);
+        $user = $this->creerUser('test', [ROLE_USER]);
         self::assertInstanceOf(
             UserInterface::class,
             $this->provider->refreshUser($user)
@@ -74,19 +79,21 @@ class UserProviderTest extends TestCase
     public function testSupportsClass()
     {
         self::assertFalse($this->provider->supportsClass('test'));
-        self::assertTrue($this->provider->supportsClass('Viduc\CasBundle\Security\CasUser'));
+        self::assertTrue($this->provider->supportsClass(
+            'Viduc\CasBundle\Security\CasUser'
+        ));
 
     }
 
     public function testConnecterEnTantQue()
     {
-        $this->security->method('getUser')->willReturn(
-            $this->creerUser('test',['ROLE_ENTANTQUE'])
+        $this->security->method(GET_USER)->willReturn(
+            $this->creerUser('test',[ROLE_ENTANTQUE])
         );
 
         /* test si la variable de session 'enTantQue.seConnecter' est existante
          et non null, utilisateur autorisé à se connecter */
-        $this->session->set('enTantQue.seConnecter', 'test');
+        $this->session->set(SE_CONNECTER, 'test');
         self::assertInstanceOf(
             UserInterface::class,
             $this->provider->connecterEnTantQue()
@@ -96,12 +103,12 @@ class UserProviderTest extends TestCase
 
     public function testEstAutoriseAseConnecterEnTantQue()
     {
-        $this->security->method('getUser')->will(
+        $this->security->method(GET_USER)->will(
             self::onConsecutiveCalls(
-                $this->creerUser('test',['ROLE_ENTANTQUE']),
-                $this->creerUser('test',['ROLE_ENTANTQUE']),
-                $this->creerUser('test',['ROLE_USER']),
-                $this->creerUser('test',['ROLE_USER'])
+                $this->creerUser('test',[ROLE_ENTANTQUE]),
+                $this->creerUser('test',[ROLE_ENTANTQUE]),
+                $this->creerUser('test',[ROLE_USER]),
+                $this->creerUser('test',[ROLE_USER])
             )
         );
         /* test avec le rôle autorisé */
@@ -122,14 +129,14 @@ class UserProviderTest extends TestCase
     public function testChargerUtilisateurCible()
     {
         /* test avec login présent et object user non présent, login connu */
-        $this->session->set('enTantQue.seConnecter', 'test');
+        $this->session->set(SE_CONNECTER, 'test');
         self::assertInstanceOf(
             CasUser::class,
             $this->provider->chargerUtilisateurCible()
         );
 
         /* test avec login présent et object user présent et valide */
-        $this->session->set('enTantQue.seConnecter', 'test');
+        $this->session->set(SE_CONNECTER, 'test');
         $user = new CasUser();
         $user->setUsername('test');
         $this->session->set('enTantQue.seConnecterUserObject', $user);
@@ -158,7 +165,7 @@ class UserProviderTest extends TestCase
         }
 
         /* test avec login présent et object user non présent, login non connu */
-        $this->session->set('enTantQue.seConnecter', 'testphpunit');
+        $this->session->set(SE_CONNECTER, 'testphpunit');
         try {
             $this->provider->chargerUtilisateurCible();
         } catch (eTqUtilisateurNonTrouveException $exception) {
@@ -177,7 +184,7 @@ class UserProviderTest extends TestCase
         * mais méthode chargerUtilisateurParSonLogin ne retourne pas un objet
         * UgaUser
         */
-        $this->session->set('enTantQue.seConnecter', 'testphpunitnonobjectuser');
+        $this->session->set(SE_CONNECTER, 'testphpunitnonobjectuser');
         try {
             $this->provider->chargerUtilisateurCible();
         } catch (eTqUtilisateurNonTrouveException $exception) {
@@ -214,7 +221,9 @@ class UserProviderTest extends TestCase
         */
         self::assertNotInstanceOf(
             CasUser::class,
-            $this->provider->chargerUtilisateurParSonLogin('testphpunitnonobjectuser')
+            $this->provider->chargerUtilisateurParSonLogin(
+                'testphpunitnonobjectuser'
+            )
         );
 
         /* test avec un user retourné */
@@ -246,7 +255,7 @@ class UserProviderTest extends TestCase
     {
         self::assertNull($this->provider->restaurerUtilisateurReferent());
         self::assertFalse(
-            $this->session->has('enTantQue.seConnecter')
+            $this->session->has(SE_CONNECTER)
         );
         self::assertFalse(
             $this->session->has('enTantQue.seConnecterReferent')
@@ -255,7 +264,7 @@ class UserProviderTest extends TestCase
             $this->session->has('enTantQue.seConnecterUserObject')
         );
         self::assertFalse(
-            $this->session->has('enTantQue.restaurer')
+            $this->session->has(RESTAURER)
         );
     }
 }

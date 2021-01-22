@@ -4,7 +4,7 @@ namespace Viduc\CasBundle\Controller;
 
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +19,7 @@ class PersonaController extends AbstractController
     private $session;
     protected $personaManipulation;
     protected $personaPhoto;
+    protected $personaRoles;
 
     /**
      * PersonaController constructor.
@@ -32,6 +33,7 @@ class PersonaController extends AbstractController
     ) {
         $this->personaManipulation = new PersonaManipulationController($kernel);
         $this->personaPhoto = new PersonaPhotoController($kernel);
+        $this->personaRoles = new PersonaRolesController();
         $this->session = $session;
     }
 
@@ -68,14 +70,18 @@ class PersonaController extends AbstractController
     final public function ajouterUnPersona(Request $request) : Response
     {
         $form = $this->creerLeFormulairePersona($request);
-        return $this->render(
-            '@Cas/persona/ajouter.html.twig',
-            array(
-                'form' => $form,
-                'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
-                'photoPersona' => "/bundles/cas/images/personas/anonyme.png"
-            )
-        );
+        if ($form->isSubmitted()) {
+            return $this->redirectToRoute('personaIndex');
+        } else {
+            return $this->render(
+                '@Cas/persona/ajouter.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
+                    'photoPersona' => "/bundles/cas/images/personas/anonyme.png"
+                )
+            );
+        }
     }
 
     /**
@@ -92,9 +98,9 @@ class PersonaController extends AbstractController
         return $this->render(
             '@Cas/persona/ajouter.html.twig',
             array(
-                'form' => $form,
+                'form' => $form->createView(),
                 'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
-                'photoPersona' => $form->vars['value']->getUrlPhoto()
+                'photoPersona' => $form->getData()->getUrlPhoto()
             )
         );
     }
@@ -119,19 +125,23 @@ class PersonaController extends AbstractController
     /**
      * @param Request $request
      * @param int|null $id
-     * @return FormView | Response
+     * @return FormInterface
      * @throws Exception
      * @codeCoverageIgnore
      */
     final public function creerLeFormulairePersona(
         Request $request,
         int $id = null
-    ) {
+    ) : FormInterface {
         $persona = new Persona();
         if ($id) {
             $persona = $this->personaManipulation->recupererUnPersona($id);
         }
-        $form = $this->createForm(PersonaType::class, $persona);
+        $form = $this->createForm(PersonaType::class, $persona, array(
+            'rolesListe' => $this->personaRoles->recupererLesRoles(
+                $this->getParameter('security.role_hierarchy.roles')
+            )
+        ));
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $photo = $this->personaPhoto->enregistrerPhoto(
@@ -150,12 +160,9 @@ class PersonaController extends AbstractController
                     $persona
                 );
             }
-            return $this->render('@Cas/persona/index.html.twig', [
-                'personas' => $this->personaManipulation->recupererLesPersonas(),
-            ]);
         }
 
-        return $form->createView();
+        return $form;
     }
 
     /**
@@ -164,12 +171,12 @@ class PersonaController extends AbstractController
      * @return RedirectResponse
      * @codeCoverageIgnore
      */
-    final public function seConnecter(int $id): ?RedirectResponse
+    final public function seConnecter($id): ?RedirectResponse
     {
         try {
-            $persona = $this->personaManipulation->recupererUnPersona($id);
+            $persona = $this->personaManipulation->recupererUnPersona((int)$id);
             $this->session->set('enTantQue.seConnecter', $persona->getUsername());
-            return $this->redirect('persona');
+            return $this->redirectToRoute('personaIndex');
         } catch (PersonaException $e) {
             $this->addFlash(
                 'error',
@@ -187,7 +194,7 @@ class PersonaController extends AbstractController
     {
         $this->session->set('enTantQue.restaurer', true);
         /* @codeCoverageIgnoreStart */
-        return $this->redirect('persona');
+        return $this->redirectToRoute('personaIndex');
         /* @codeCoverageIgnoreEnd */
     }
 }

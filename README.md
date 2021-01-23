@@ -175,12 +175,10 @@ CONFIGURATION
         Vous serez alors redirigé automatiquement vers votre serveur SSO pour être authentifié.
         Une fois logué, vous serez redirigé vers une page du bundle (Connexion En Tant Que)
         
-    <div style="background-color:rgba(0, 0, 0, 0.0470588); text-align:center; vertical-align: middle; padding:40px 0; margin-top:30px">
     ![warning](./Readme/warning.png) Si le path vous renvoi un 404 not found, essayer ces otpions:
         - composer require symfony/apache-pack
         et dans fichier conf de votre serveur apache:
         <Directory "/Library/WebServer/Documents/Your_public_symfony_directory"> .... FallbackResource /index.php .... </Directory>
-    </div>
     
 	#### - **Configuration de la partie En Tant Que:**
     La fonctionnalité "En Tant Que" permet de prendre le contrôle d'un compte 

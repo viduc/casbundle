@@ -3,22 +3,42 @@
 namespace Viduc\CasBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 
+/* @codeCoverageIgnoreStart */
+define("PERSONA_DOSSIER", '/public/images/personas');
+/* @codeCoverageIgnoreEnd */
 class PersonaPhotoController extends AbstractController implements PersonaPhotoInterfaceController
 {
     private $kernel;
+    private $filesystem;
 
     public function __construct(KernelInterface $kernel)
     {
+        $this->filesystem = new Filesystem();
         $this->kernel = $kernel;
+        $this->creerLeDossierDesPersonaSiInexistant();
     }
 
     /** --------------------> CREATION <--------------------**/
     /**
-
+    /**
+     * Créer le dossier personas si il n'existe pas
+     * @codeCoverageIgnore
+     */
+    final public function creerLeDossierDesPersonaSiInexistant() : void
+    {
+        if (!$this->filesystem->exists(
+            $this->kernel->getProjectDir() . PERSONA_DOSSIER)
+        ) {
+            $this->filesystem->mkdir(
+                $this->kernel->getProjectDir() . PERSONA_DOSSIER
+            );
+        }
+    }
 
     /** --------------------> LECTURE <--------------------**/
     /**

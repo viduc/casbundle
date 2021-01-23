@@ -175,7 +175,7 @@ CONFIGURATION
         Vous serez alors redirigé automatiquement vers votre serveur SSO pour être authentifié.
         Une fois logué, vous serez redirigé vers une page du bundle (Connexion En Tant Que)
         
-    ![warning](Readme/warning.png) Si le path vous renvoi un 404 not found, essayer ces otpions:
+        ![warning](Readme/warning.png) Si le path vous renvoi un 404 not found, essayer ces otpions:
         
         - composer require symfony/apache-pack
         et dans fichier conf de votre serveur apache:
@@ -273,3 +273,25 @@ CONFIGURATION
     php /bin/console cache:clear
     ```
     Votre template devrait être chargé à la place du template du Bundle.
+    Vous pouvez créer un lien pour le retour sur la session appelante en utilisant le path enTantQueRestore:
+    ```html
+    <a href="{{ path('enTantQueRestore') }}">Revenir à ma session</a>
+    ```
+  
+    #### - **Configuration des personas:**
+    Cette fonctionnalité vous offre la possibilité de créer des personas (utilisés pendant le développement).
+    Pour accéder à la page des personas, allez sur l'url personaIndex
+    ```html
+    <a href="{{ path('personaIndex') }}">Revenir à ma session</a>
+    ```
+    ou /persona epuis le navigateur (http://monsite/persona).
+    Deux personas d'exemple sont présents:
+    ![personas](Readme/personas.png)
+    En cliquant dessus vous pourrez découvrir leurs spécificités:
+    ![persona](Readme/persona.png)
+    L'icone crayon en haut à gauche vous permet de modifier le persona, la croix dessous de le supprimer.
+    Le bouton connecter vous permet d'utiliser le fonctionner connecter en tant que depuis ce persona.
+    
+    Vous pouvez créer autant de persona que vous souhaitez. Pour créer un persona, cliquez sur ajouter en haut à droite de la page d'index:
+    ![ajouter-persona](Readme/persona-ajouter.png)
+    

@@ -176,8 +176,10 @@ CONFIGURATION
         Une fois logué, vous serez redirigé vers une page du bundle (Connexion En Tant Que)
         
     ![warning](Readme/warning.png) Si le path vous renvoi un 404 not found, essayer ces otpions:
+        
         - composer require symfony/apache-pack
         et dans fichier conf de votre serveur apache:
+        
         <Directory "/Library/WebServer/Documents/Your_public_symfony_directory"> .... FallbackResource /index.php .... </Directory>
     
 	#### - **Configuration de la partie En Tant Que:**

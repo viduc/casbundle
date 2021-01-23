@@ -26,7 +26,7 @@ class EnTantQueController extends AbstractController
      * @return RedirectResponse|Response
      * @codeCoverageIgnore
      */
-    final public function connecterEnTantQue(Request $request) : RedirectResponse
+    final public function connecterEnTantQue(Request $request)
     {
         $form = $this->createFormBuilder()
              ->add(

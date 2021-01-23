@@ -4,7 +4,8 @@ Viduc/CasBundle
 CasBundle est un bundle pour Symfony 5. Il permet de s'authentifié via un
 serveur SSO (cas) de façon très simple. Il embarque également un système de
 switch utilisateur afin de pouvoir prendre possession d'un compte utilisateur
-sans connaitre ses identifiants (fonctionnalité 'EnTantQue')
+sans connaitre ses identifiants (fonctionnalité 'EnTantQue').
+Il est également aussi possible de créer des personas pour les phases de développement de votre application.
 
 AUTEUR
 ------
@@ -36,13 +37,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+<a name="prerequis"></a>
 PREREQUIS
 ---------
 
 Ce bundle fonctionne avec une version minimale de symfony 5.1 et une version de
 php 7.2.
-Pour fonctionner, ce bundle nécessite également l'installation de la libraire
-jasig/phpcas
+La dépendance jasig/phpcas est nécessaire et sera installée avec la librairie.
+
 
 INSTALLATION
 ------------
@@ -174,15 +176,16 @@ CONFIGURATION
         Accédez ensuite à l'url de votre application suivit de "/cas" (par exemple: http://monapli/cas).
         Vous serez alors redirigé automatiquement vers votre serveur SSO pour être authentifié.
         Une fois logué, vous serez redirigé vers une page du bundle (Connexion En Tant Que)
-        
-        ![warning](Readme/warning.png) Si le path vous renvoi un 404 not found, essayer ces otpions:
-        
-        - composer require symfony/apache-pack
-        et dans fichier conf de votre serveur apache:
-        
-        <Directory "/Library/WebServer/Documents/Your_public_symfony_directory"> .... FallbackResource /index.php .... </Directory>
-    
-	#### - **Configuration de la partie En Tant Que:**
+
+    |                  |                                                       |
+    | :--------------- |:-----------------------------------------------------|
+    | ![warning](Readme/warning.png)  |   Si le path vous renvoi un 404 not found, essayer ces otpions: |
+    |                  | **composer require symfony/apache-pack**                  |
+    |                  | et dans fichier conf de votre serveur apache:         |
+    |                  | **<Directory "/Library/WebServer/Documents/Your_public_symfony_directory"> .... FallbackResource /index.php .... </Directory>**|
+
+- **Configuration de la partie En Tant Que:**
+
     La fonctionnalité "En Tant Que" permet de prendre le contrôle d'un compte 
     utilisateur connu de votre application. Elle est normalement réservée à un
     groupe d'utilisateur restreint (gestionnaire ou administrateur de l'application)
@@ -277,21 +280,42 @@ CONFIGURATION
     ```html
     <a href="{{ path('enTantQueRestore') }}">Revenir à ma session</a>
     ```
-  
-    #### - **Configuration des personas:**
+- **Configuration des personas:**
+
     Cette fonctionnalité vous offre la possibilité de créer des personas (utilisés pendant le développement).
     Pour accéder à la page des personas, allez sur l'url personaIndex
     ```html
-    <a href="{{ path('personaIndex') }}">Revenir à ma session</a>
+    <a href="{{ path('personaIndex') }}">Persona</a>
     ```
-    ou /persona epuis le navigateur (http://monsite/persona).
+    ou /persona depuis le navigateur (http://monsite/persona).
     Deux personas d'exemple sont présents:
-    ![personas](Readme/personas.png)
-    En cliquant dessus vous pourrez découvrir leurs spécificités:
-    ![persona](Readme/persona.png)
-    L'icone crayon en haut à gauche vous permet de modifier le persona, la croix dessous de le supprimer.
-    Le bouton connecter vous permet d'utiliser le fonctionner connecter en tant que depuis ce persona.
     
-    Vous pouvez créer autant de persona que vous souhaitez. Pour créer un persona, cliquez sur ajouter en haut à droite de la page d'index:
+    ![personas](Readme/personas.png)
+    
+    En cliquant dessus vous pourrez découvrir leurs spécificités:
+    
+    ![persona](Readme/persona.png)
+    
+    L'icone crayon en haut à gauche vous permet de modifier le persona, la croix dessous de le supprimer.
+    
+    Le bouton connecter vous permet d'utiliser la fonctionnalité qui permet de se *connecter en tant que* depuis ce persona.
+    
+    Vous pouvez créer autant de persona que vous souhaitez.
+    Pour créer un persona, cliquez sur ajouter en haut à droite de la page d'index:
+    
     ![ajouter-persona](Readme/persona-ajouter.png)
     
+    |                  |                                                       |
+    | :--------------- |:-----------------------------------------------------|
+    | ![warning](Readme/warning.png)  | Vous devez renseigner au moins une hierarchie de roles dans le fichier **security.yaml**: |
+    |                   | role_hierarchy: ROLE_ADMIN: [ROLE_USER] |
+    
+    Vous pouvez ajouter une photo depuis la banque d'images à votre persona en cliquant sur la photo présente :
+    
+    ![photo-persona](Readme/persona-photo.png)
+    
+    Vous pouvez également charger vos images en cliquant sur l'icone:
+    
+    ![photo-persona](Readme/persona-photo-upload.png)
+    
+    Reseignez les champs obligatoires pour créer votre persona.

@@ -175,7 +175,7 @@ CONFIGURATION
         Vous serez alors redirigé automatiquement vers votre serveur SSO pour être authentifié.
         Une fois logué, vous serez redirigé vers une page du bundle (Connexion En Tant Que)
         
-    ![warning](./Readme/warning.png) Si le path vous renvoi un 404 not found, essayer ces otpions:
+    ![warning](Readme/warning.png) Si le path vous renvoi un 404 not found, essayer ces otpions:
         - composer require symfony/apache-pack
         et dans fichier conf de votre serveur apache:
         <Directory "/Library/WebServer/Documents/Your_public_symfony_directory"> .... FallbackResource /index.php .... </Directory>

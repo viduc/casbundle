@@ -6,6 +6,18 @@ jQuery(document).ready(function() {
     $(document).on("click", "[id^=selectPhoto]", function() {
         selectionnerPhotoCorousel(this.id);
     });
+    $(document).on("click", "#ajouterBut", function() {
+        ajouterUnBut();
+    });
+    $(document).on("click", "#viderBut", function() {
+        $("#cas_bundle_persona_type_buts").val('');
+    });
+    $(document).on("click", "#ajouterPersonalite", function() {
+        ajouterUnePersonalite();
+    });
+    $(document).on("click", "#viderPersonalite", function() {
+        $("#cas_bundle_persona_type_personnalite").val('');
+    });
 });
 
 /**
@@ -20,4 +32,38 @@ function selectionnerPhotoCorousel(idPhoto)
     $("#photoPersona").attr("src", pathPhoto);
     $("#cas_bundle_persona_type_urlPhoto").val(pathPhoto);
     $('#modalPhoto').modal('hide');
+}
+
+/**
+ * Ajout un but à la liste des buts dans le input suvit d'un ;
+ */
+function ajouterUnBut()
+{
+    let but = $("#ajoutBut").val();
+    if (but !== "") {
+        let buts = $("#cas_bundle_persona_type_buts").val();
+        if (buts !== "") {
+            buts += (";")
+        }
+        buts += but
+        $("#cas_bundle_persona_type_buts").val(buts);
+        $("#ajoutBut").val('');
+    }
+}
+
+/**
+ * Ajout une personalité à la liste des personalités dans le input suvit d'un ;
+ */
+function ajouterUnePersonalite()
+{
+    let personalite = $("#ajoutPersonalite").val();
+    if (personalite !== "") {
+        let personalites = $("#cas_bundle_persona_type_personnalite").val();
+        if (personalites !== "") {
+            personalites += (";")
+        }
+        personalites += personalite
+        $("#cas_bundle_persona_type_personnalite").val(personalites);
+        $("#ajoutPersonalite").val('');
+    }
 }

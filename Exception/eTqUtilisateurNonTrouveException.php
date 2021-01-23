@@ -1,7 +1,9 @@
 <?php
 namespace Viduc\CasBundle\Exception;
 
-class eTqUtilisateurNonTrouveException extends \RuntimeException
+use RuntimeException;
+
+class eTqUtilisateurNonTrouveException extends RuntimeException
 {
 
 }

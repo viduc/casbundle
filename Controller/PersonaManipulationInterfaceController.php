@@ -1,4 +1,9 @@
-<?php
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\Controller;
 
@@ -17,6 +22,8 @@ interface PersonaManipulationInterfaceController
     /**
      * Enregsitre la liste des personas dans le fichier json
      * @param array $liste
+     * @return void
+     * @test testEnregistrerLaListeDesPersonasDansLeFichierJson()
      */
     public function enregistrerLaListeDesPersonasDansLeFichierJson(
         array $liste
@@ -27,6 +34,7 @@ interface PersonaManipulationInterfaceController
      * Lit le fichier des personas
      * @test testLireLeFicherDesPersonas()
      * @return false|string
+     * @test testLireLeFicherDesPersonas()
      */
     public function lireLeFicherDesPersonas() : string;
 
@@ -39,12 +47,12 @@ interface PersonaManipulationInterfaceController
 
     /**
      * Récupère un persona par son id
-     * @param $id
+     * @param string $id
      * @return Persona - objet Persona
      * @test testRecupererUnPersona()
      * @throws PersonaException
      */
-    public function recupererUnPersona($id);
+    public function recupererUnPersona(string $id) : Persona;
 
     /**
      * récupère un id non utilisé dans le fichier des personas
@@ -65,6 +73,7 @@ interface PersonaManipulationInterfaceController
     /**
      * Modifie un persona dans le fichier json
      * @param Persona $persona
+     * @test testModifierUnPersonaAuFichierJson()
      */
     public function modifierUnPersonaAuFichierJson(Persona $persona) : void;
 
@@ -72,6 +81,7 @@ interface PersonaManipulationInterfaceController
     /**
      * Supprime un persona dans le fichier json
      * @param Persona $persona
+     * @test testSupprimerUnPersonaDuFichierJson
      */
     public function supprimerUnPersonaDuFichierJson(Persona $persona) : void;
 

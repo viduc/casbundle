@@ -1,4 +1,9 @@
-<?php
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\Controller;
 
@@ -14,6 +19,11 @@ use Viduc\CasBundle\Entity\Persona;
 use Viduc\CasBundle\Exception\PersonaException;
 use Viduc\CasBundle\Form\PersonaType;
 
+/**
+ * Class PersonaController
+ * @package Viduc\CasBundle\Controller
+ * @codeCoverageIgnore
+ */
 class PersonaController extends AbstractController
 {
     private $session;
@@ -72,16 +82,16 @@ class PersonaController extends AbstractController
         $form = $this->creerLeFormulairePersona($request);
         if ($form->isSubmitted()) {
             return $this->redirectToRoute('personaIndex');
-        } else {
-            return $this->render(
-                '@Cas/persona/ajouter.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
-                    'photoPersona' => "/bundles/cas/images/personas/anonyme.png"
-                )
-            );
         }
+
+        return $this->render(
+            '@Cas/persona/ajouter.html.twig',
+            array(
+                'form' => $form->createView(),
+                'photos' => $this->personaPhoto->recupererLaListeDesPhotos(),
+                'photoPersona' => "/bundles/cas/images/personas/anonyme.png"
+            )
+        );
     }
 
     /**
@@ -167,11 +177,11 @@ class PersonaController extends AbstractController
 
     /**
      * permet de se connecter avec un persona
-     * @param $id
+     * @param string $id
      * @return RedirectResponse
      * @codeCoverageIgnore
      */
-    final public function seConnecter($id): ?RedirectResponse
+    final public function seConnecter(string $id): ?RedirectResponse
     {
         try {
             $persona = $this->personaManipulation->recupererUnPersona((int)$id);
@@ -188,7 +198,7 @@ class PersonaController extends AbstractController
     /**
      * Restaure la session d'origine
      * @return RedirectResponse
-     * test testRestaurerEnTantQue()
+     * @codeCoverageIgnore
      */
     final public function restaurerEnTantQue(): RedirectResponse
     {

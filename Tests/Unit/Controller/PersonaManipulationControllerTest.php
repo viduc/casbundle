@@ -1,4 +1,9 @@
-<?php
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\Tests\Unit\Controller;
 
@@ -89,12 +94,12 @@ class PersonaManipulationControllerTest extends TestCase
         $this->personamanipulation->creerLeFichierPersonaSiInexistant();
         $persona = $this->donneesDeTest->genererUnPersona();
         self::assertEquals(
-            $this->personamanipulation->recupererUnPersona(1),
+            $this->personamanipulation->recupererUnPersona('1'),
             $persona
         );
 
         try {
-            $this->personamanipulation->recupererUnPersona(111);
+            $this->personamanipulation->recupererUnPersona('111');
         } catch (PersonaException $exception) {
             $message = 'Aucun persona trouvé';
             self::assertEquals($message, $exception->getMessage());

@@ -1,4 +1,9 @@
-<?php
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\DependencyInjection;
 
@@ -14,9 +19,9 @@ use Symfony\Component\HttpKernel\Kernel;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritdoc}
+     * @return TreeBuilder
      */
-    public function getConfigTreeBuilder()
+    final public function getConfigTreeBuilder() : TreeBuilder
     {
         $treeBuilder = new TreeBuilder('Viduc_cas');
         //fix deprecated call

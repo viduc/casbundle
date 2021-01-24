@@ -1,4 +1,9 @@
-<?php
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\Controller;
 
@@ -25,7 +30,6 @@ class PersonaPhotoController extends AbstractController implements PersonaPhotoI
 
     /** --------------------> CREATION <--------------------**/
     /**
-    /**
      * Créer le dossier personas si il n'existe pas
      * @codeCoverageIgnore
      */
@@ -46,7 +50,7 @@ class PersonaPhotoController extends AbstractController implements PersonaPhotoI
      * @return array
      * @test testRecupererLaListeDesPhotos()
      */
-    final public function recupererLaListeDesPhotos() : Array
+    final public function recupererLaListeDesPhotos() : array
     {
         $finder = new Finder();
         $dossierHomme = '/public/bundles/cas/images/personas/hommes';
@@ -81,7 +85,7 @@ class PersonaPhotoController extends AbstractController implements PersonaPhotoI
      * @param String $urlPhoto
      * @param File|null $file
      * @return String - le path du fichier, '', si aucun
-     * @codeCoverageIgnore
+     * @test testEnregistrerPhoto()
      */
     final public function enregistrerPhoto(
         String $username,
@@ -89,7 +93,7 @@ class PersonaPhotoController extends AbstractController implements PersonaPhotoI
         File $file = null
     ) :String {
         $retour = '/images/personas/nc.jpeg';
-        if ($file && file_exists($file)) {
+        if ($file && file_exists($file->getPathname())) {
             $dossier = '/public/images/personas';
             $name = $username . '.' .$file->guessExtension();
             $file->move(

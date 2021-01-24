@@ -5,15 +5,12 @@
                 {% set url = persona.urlPhoto %}
             {% endif %}
             <span class="card-header" style="background-image: url({{ asset(url) }});">
-                                    <span class="card-title">
-                                        <h3>{{ persona.prenom }} {{ persona.nom }}</h3>
-                                    </span>
-                                </span>
-            <span class="card-summary">
-                                    {{ persona.citation }}
-                                </span>
-            <span class="card-meta">
-                                </span>
+                <span class="card-title">
+                    <h3>{{ persona.prenom }} {{ persona.nom }}</h3>
+                </span>
+            </span>
+            <span class="card-summary">{{ persona.citation }}</span>
+            <span class="card-meta"></span>
         </a>
 
         <div class="popup" id="popup{{ persona.id }}">
@@ -34,8 +31,8 @@
                                 <div class="progress-outer">
                                     <div class="progress">
                                         <div class="progress-bar
-                                                                progress-bar-striped
-                                                                progress-bar-danger"
+                                            progress-bar-striped
+                                            progress-bar-danger"
                                              style="width:{{ persona.aisanceNumerique*20 }}%;">
                                         </div>
                                         <div class="progress-value">
@@ -49,8 +46,8 @@
                                 <div class="progress-outer">
                                     <div class="progress">
                                         <div class="progress-bar
-                                                                progress-bar-striped
-                                                                progress-bar-danger" style="width:{{ persona.expertiseDomaine*20 }}%;">
+                                            progress-bar-striped
+                                            progress-bar-danger" style="width:{{ persona.expertiseDomaine*20 }}%;">
                                         </div>
                                         <div class="progress-value">
                                             <span>{{ persona.expertiseDomaine*20 }}</span>%
@@ -63,8 +60,8 @@
                                 <div class="progress-outer">
                                     <div class="progress">
                                         <div class="progress-bar
-                                                            progress-bar-striped
-                                                            progress-bar-danger" style="width:{{ persona.frequenceUsage*20 }}%;">
+                                            progress-bar-striped
+                                            progress-bar-danger" style="width:{{ persona.frequenceUsage*20 }}%;">
                                         </div>
                                         <div class="progress-value">
                                             <span>{{ persona.frequenceUsage*20 }}</span>%
@@ -115,7 +112,6 @@
                     </table>
                     {% if app.session.get('enTantQue.seConnecter') is defined
                         and app.session.get('enTantQue.seConnecter')
-                        and app.session.get('enTantQue.seConnecter') == persona.username
                     %}
                         <div class="alert alert-info">
                             Vous êtes connecter en tant que :

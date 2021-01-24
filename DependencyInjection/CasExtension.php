@@ -1,5 +1,9 @@
-<?php
-
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\DependencyInjection;
 
@@ -13,7 +17,7 @@ use Viduc\CasBundle\Security\UserProvider;
 class CasExtension extends Extension
 {
 
-    public function load(array $configs, ContainerBuilder $container)
+    final public function load(array $configs, ContainerBuilder $container) : void
     {
         $loader = new YamlFileLoader(
             $container,

@@ -1,4 +1,9 @@
-<?php
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\Controller;
 
@@ -10,8 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-define("USERS", 'enTantQue.users'); // @codeCoverageIgnore
-
+define("USERS", 'enTantQue.users');
+// @codeCoverageIgnore
 class EnTantQueController extends AbstractController
 {
     private $session;
@@ -26,7 +31,7 @@ class EnTantQueController extends AbstractController
      * @return RedirectResponse|Response
      * @codeCoverageIgnore
      */
-    final public function connecterEnTantQue(Request $request)
+    final public function connecterEnTantQue(Request $request) : object
     {
         $form = $this->createFormBuilder()
              ->add(
@@ -37,8 +42,10 @@ class EnTantQueController extends AbstractController
              ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $username = $form->getData()['users'];
-            $this->session->set('enTantQue.seConnecter', $username);
+            $this->session->set(
+                'enTantQue.seConnecter',
+                $form->getData()['users']
+            );
             return $this->redirect('cas');
         }
 
@@ -88,7 +95,7 @@ class EnTantQueController extends AbstractController
     /**
      * Restaure la session d'origine
      * @return RedirectResponse
-     * @test testRestaurerEnTantQue()
+     * test: testRestaurerEnTantQue()
      */
     final public function restaurerEnTantQue() : RedirectResponse
     {

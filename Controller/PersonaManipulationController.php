@@ -1,4 +1,9 @@
-<?php
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\Controller;
 
@@ -54,6 +59,7 @@ class PersonaManipulationController extends AbstractController implements Person
      * Enregsitre la liste des personas dans le fichier json
      * @param array $liste
      * @return void
+     * @test testEnregistrerLaListeDesPersonasDansLeFichierJson()
      */
     final public function enregistrerLaListeDesPersonasDansLeFichierJson(
         array $liste
@@ -75,6 +81,7 @@ class PersonaManipulationController extends AbstractController implements Person
      * Lit le fichier des personas
      * @test testLireLeFicherDesPersonas()
      * @return false|string
+     * @test testLireLeFicherDesPersonas()
      */
     final public function lireLeFicherDesPersonas() : string
     {
@@ -108,12 +115,12 @@ class PersonaManipulationController extends AbstractController implements Person
 
     /**
      * Récupère un persona par son id
-     * @param $id
+     * @param string $id
      * @return Persona - objet Persona
      * @test testRecupererUnPersona()
      * @throws PersonaException
      */
-    final public function recupererUnPersona($id)
+    final public function recupererUnPersona(string $id) : Persona
     {
         $personas = $this->recupererLesPersonas();
         foreach ($personas as $persona) {
@@ -154,8 +161,6 @@ class PersonaManipulationController extends AbstractController implements Person
     final public function ajouterUnPersonaAuFichierJson(Persona $persona) : void
     {
         $persona->setId($this->genererIdPersona());
-        //$persona->setButs('');
-        //$persona->setPersonnalite('');
         $liste = $this->recupererLesPersonas();
         $liste[] = $persona;
         $this->enregistrerLaListeDesPersonasDansLeFichierJson($liste);
@@ -165,6 +170,7 @@ class PersonaManipulationController extends AbstractController implements Person
     /**
      * Modifie un persona dans le fichier json
      * @param Persona $persona
+     * @test testModifierUnPersonaAuFichierJson()
      */
     final public function modifierUnPersonaAuFichierJson(Persona $persona) : void
     {
@@ -183,6 +189,7 @@ class PersonaManipulationController extends AbstractController implements Person
     /**
      * Supprime un persona dans le fichier json
      * @param Persona $persona
+     * @test testSupprimerUnPersonaDuFichierJson
      */
     final public function supprimerUnPersonaDuFichierJson(Persona $persona): void
     {
@@ -194,5 +201,4 @@ class PersonaManipulationController extends AbstractController implements Person
         }
         $this->enregistrerLaListeDesPersonasDansLeFichierJson($liste);
     }
-
 }

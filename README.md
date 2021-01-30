@@ -150,7 +150,7 @@ CONFIGURATION
                         pattern: ^/(_(profiler|wdt)|css|images|js)/
                         security: false
                     main:
-                        anonymous: lazy
+                        anonymous: true
                         logout: ~
                         guard:
                             authenticators:

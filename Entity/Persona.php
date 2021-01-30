@@ -230,4 +230,12 @@ class Persona
     function setIsActive($isActive) {
         $this->isActive = $isActive;
     }
+
+    function isActive() {
+        return $this->isActive;
+    }
+
+    function getIsActive() {
+        return $this->isActive;
+    }
 }

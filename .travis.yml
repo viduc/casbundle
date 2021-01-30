@@ -15,7 +15,10 @@ before_script:
   - chmod +x ./cc-test-reporter
   - "./cc-test-reporter before-build"
 script:
-  - composer update
+  - composer install
+  - composer require roave/security-advisories:dev-master
+  - composer require phpunit/phpunit:9.5
+  - composer require symfony/browser-kit:3.4.42
   - composer require symfony/phpunit-bridge:3.4.42
   - composer require symfony/http-foundation:3.4.42
   - composer require symfony/framework-bundle:3.4.42

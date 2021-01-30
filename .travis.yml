@@ -16,6 +16,7 @@ before_script:
   - "./cc-test-reporter before-build"
 script:
   - composer update
+  - composer require symfony/phpunit-bridge:3.4.42
   - composer require symfony/http-foundation:3.4.42
   - composer require symfony/framework-bundle:3.4.42
   - composer require symfony/security-core:3.4.42
@@ -23,7 +24,7 @@ script:
   - composer require codeclimate/php-test-reporter
   - composer require symfony/serializer
   - composer require symfony/property-access
-  - php vendor/bin/phpunit --coverage-clover=clover.xml
+  - phpdbg -qrr vendor/bin/phpunit --coverage-clover=clover.xml
 after_script:
   - "./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT"
   - cp clover.xml coverage.xml

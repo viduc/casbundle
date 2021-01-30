@@ -17,7 +17,7 @@ before_script:
 script:
   - composer install
   - composer require roave/security-advisories:dev-master
-  - composer require phpunit/phpunit:^8.5|^9.0
+  - composer require phpunit/phpunit:8.5
   - composer require symfony/browser-kit:3.4.42
   - composer require symfony/phpunit-bridge:3.4.42
   - composer require symfony/http-foundation:3.4.42

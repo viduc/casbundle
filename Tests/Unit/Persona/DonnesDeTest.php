@@ -34,7 +34,7 @@ class DonnesDeTest
         $persona->setPersonnalite('personalité');
         $persona->setUrlPhoto("l'url de la photo");
         $persona->setRoles(['roles']);
-        $persona->setIsActive(true);
+        //$persona->setIsActive(true);
 
         return $persona;
     }

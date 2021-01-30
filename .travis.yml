@@ -23,7 +23,7 @@ script:
   - composer require symfony/framework-bundle:3.4.42
   - composer require symfony/security-core:3.4.42
   - composer require symfony/console:3.4.42
-  - composer require codeclimate/php-test-reporter
+  - composer require codeclimate/php-test-reporter --with-all-dependencies
   - composer require symfony/serializer
   - composer require symfony/property-access
   - php vendor/bin/phpunit --coverage-clover=clover.xml

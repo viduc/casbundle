@@ -24,7 +24,7 @@ script:
   - composer require codeclimate/php-test-reporter
   - composer require symfony/serializer
   - composer require symfony/property-access
-  - phpdbg -qrr vendor/bin/phpunit --coverage-clover=clover.xml
+  - php vendor/bin/phpunit --coverage-clover=clover.xml
 after_script:
   - "./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT"
   - cp clover.xml coverage.xml

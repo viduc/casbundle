@@ -15,8 +15,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - "./cc-test-reporter before-build"
 script:
-  - composer install
-  - composer require symfony/phpunit-bridge:3.4.42
+  - composer update
   - composer require symfony/http-foundation:3.4.42
   - composer require symfony/framework-bundle:3.4.42
   - composer require symfony/security-core:3.4.42

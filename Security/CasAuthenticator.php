@@ -1,125 +1,85 @@
-<?php declare(strict_types=1);
-/******************************************************************************/
-/*                                  CASBUNDLE                                 */
-/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
-/*                              Licence: Apache-2.0                           */
-/******************************************************************************/
+<?php
+
 
 namespace Viduc\CasBundle\Security;
 
-use \phpcas;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
-class CasAuthenticator extends AbstractGuardAuthenticator
+class CasAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
-    private $casVersion;
-    private $casHost;
-    private $casPort;
-    private $casUri;
-    private $failMessage;
+    private UrlGeneratorInterface $urlGenerator;
+    private SessionInterface $session;
 
-    public function __construct(array $config)
-    {
-        $this->casVersion = $config['version'];
-        $this->casHost = $config['host'];
-        $this->casPort = $config['port'];
-        $this->casUri = $config['uri'];
-        $this->failMessage = "Aucun utilisateur trouvé";
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function start(
-        Request $request,
-        AuthenticationException $authException = null
+    public function __construct(
+        array $config,
+        UrlGeneratorInterface $urlGenerator,
+        SessionInterface $session
     ) {
-        $data = array(
-            'message' => 'Authentication Required'
-        );
-
-        return new JsonResponse($data, 401);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function supports(Request $request)
-    {
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCredentials(Request $request)
-    {
-        \phpCAS::setDebug();
-        \phpCAS::setVerbose(true);
+        $this->urlGenerator = $urlGenerator;
+        $this->session = $session;
         if (!\phpCAS::isInitialized()) {
             \phpCAS::client(
-                $this->casVersion,
-                $this->casHost,
-                $this->casPort,
-                $this->casUri
+                $config['version'],
+                $config['host'],
+                $config['port'],
+                $config['uri']
             );
+            \phpCAS::setNoCasServerValidation();
         }
-        \phpCAS::setNoCasServerValidation();
-        \phpCAS::forceAuthentication();
-
-        return array_merge(
-            ['username' => phpCAS::getUser()],
-            phpCAS::getAttributes()
-        );
+        $this->chargerUtilisateurEtq();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getUser($credentials, UserProviderInterface $userProvider)
+
+    public function chargerUtilisateurEtq(): void
     {
-        if (!$userProvider instanceof UserProvider) {
-            return;
-        }
-
-        try {
-            return $userProvider->loadUserByUsername($credentials['username']);
-        }
-        catch (UsernameNotFoundException $e) {
-            throw new CustomUserMessageAuthenticationException(
-                $this->failMessage
-            );
-        }
+        $user = new User();
+        $user->setUsername('test');
+        $tab[] = $user;
+        $user = new User();
+        $user->setUsername('toto');
+        $tab[] = $user;
+        $user = new User();
+        $user->setUsername('tutu');
+        $tab[] = $user;
+        $this->session->set('enTantQue.users', $tab);
     }
 
     /**
      * @inheritDoc
      */
-    public function checkCredentials($credentials, UserInterface $user)
+    public function supports(Request $request): ?bool
     {
-        if ($user) {
-            return true;
-        }
-
-        return false;
+        return $this->session->has('viduc_cas_username');
     }
 
     /**
      * @inheritDoc
      */
-    public function onAuthenticationFailure(
-        Request $request,
-        AuthenticationException $exception
-    ) {
-
+    public function authenticate(Request $request): PassportInterface
+    {
+        return new Passport(
+            new UserBadge($this->session->get('viduc_cas_username')),
+            new CustomCredentials(
+                function ($credentials, UserInterface $user) {
+                    return \phpCAS::isAuthenticated();
+                },
+                // The custom credentials
+                ''
+        ));
     }
 
     /**
@@ -128,16 +88,29 @@ class CasAuthenticator extends AbstractGuardAuthenticator
     public function onAuthenticationSuccess(
         Request $request,
         TokenInterface $token,
-        $providerKey
-    ) {
+        string $firewallName
+    ): ?Response {
         return null;
     }
 
     /**
      * @inheritDoc
      */
-    public function supportsRememberMe()
-    {
-        return false;
+    public function onAuthenticationFailure(
+        Request $request,
+        AuthenticationException $exception
+    ): ?Response {
+        return null;
+    }
+
+    public function start(
+        Request $request,
+        AuthenticationException $authException = null
+    ) {
+        \phpCAS::forceAuthentication();
+        $this->session->set('viduc_cas_username', \phpCAS::getUser());
+        return new RedirectResponse(
+            $this->urlGenerator->generate($request->attributes->get('_route'))
+        );
     }
 }

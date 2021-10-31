@@ -44,7 +44,9 @@ PREREQUIS
 Ce bundle fonctionne avec une version minimale de symfony 5.1 et une version de
 php 7.2.
 La dépendance jasig/phpcas est nécessaire et sera installée avec la librairie.
-
+A partir de la version 1.1.0 le cas authenticator fonctionne avec le nouveau système de symfony.
+Si vous souhaitez utilisez l'autenticator guard vous devez utiliser les versions précédentes.
+Les personnas ont été supprimés avec la version 1.1.0, un autre bundle sera disponible pour cette fonctionnalité.
 
 INSTALLATION
 ------------
@@ -150,11 +152,11 @@ CONFIGURATION
                         pattern: ^/(_(profiler|wdt)|css|images|js)/
                         security: false
                     main:
-                        anonymous: true
+                        lazy: true
+                        provider: app_user_provider
                         logout: ~
-                        guard:
-                            authenticators:
-                                - viduc.cas_authenticator
+                        custom_authenticator:
+                            - viduc.cas_authenticator
     
             access_control:
                 - { path: ^/test, roles: ROLE_USER }
@@ -280,42 +282,3 @@ CONFIGURATION
     ```html
     <a href="{{ path('enTantQueRestore') }}">Revenir à ma session</a>
     ```
-- **Configuration des personas:**
-
-    Cette fonctionnalité vous offre la possibilité de créer des personas (utilisés pendant le développement).
-    Pour accéder à la page des personas, allez sur l'url personaIndex
-    ```html
-    <a href="{{ path('personaIndex') }}">Persona</a>
-    ```
-    ou /persona depuis le navigateur (http://monsite/persona).
-    Deux personas d'exemple sont présents:
-    
-    ![personas](Readme/personas.png)
-    
-    En cliquant dessus vous pourrez découvrir leurs spécificités:
-    
-    ![persona](Readme/persona.png)
-    
-    L'icone crayon en haut à gauche vous permet de modifier le persona, la croix dessous de le supprimer.
-    
-    Le bouton connecter vous permet d'utiliser la fonctionnalité qui permet de se *connecter en tant que* depuis ce persona.
-    
-    Vous pouvez créer autant de persona que vous souhaitez.
-    Pour créer un persona, cliquez sur ajouter en haut à droite de la page d'index:
-    
-    ![ajouter-persona](Readme/persona-ajouter.png)
-    
-    |                  |                                                       |
-    | :--------------- |:-----------------------------------------------------|
-    | ![warning](Readme/warning.png)  | Vous devez renseigner au moins une hierarchie de roles dans le fichier **security.yaml**: |
-    |                   | role_hierarchy: ROLE_ADMIN: [ROLE_USER] |
-    
-    Vous pouvez ajouter une photo depuis la banque d'images à votre persona en cliquant sur la photo présente :
-    
-    ![photo-persona](Readme/persona-photo.png)
-    
-    Vous pouvez également charger vos images en cliquant sur l'icone:
-    
-    ![photo-persona](Readme/persona-photo-upload.png)
-    
-    Reseignez les champs obligatoires pour créer votre persona.

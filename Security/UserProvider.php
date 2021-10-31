@@ -7,6 +7,7 @@
 
 namespace Viduc\CasBundle\Security;
 
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -39,11 +40,32 @@ class UserProvider implements UserProviderInterface
      * If you're not using these features, you do not need to implement
      * this method.
      *
+     * @throws UserNotFoundException if the user is not found
+     */
+    final public function loadUserByIdentifier($identifier): UserInterface
+    {
+        if ($this->session->has('enTantQue.restaurer')) {
+            $this->restaurerUtilisateurReferent();
+        }
+        if ($this->session->has(SECONNECTER)) {
+            $this->enregistrerLutilisateurReferent($identifier);
+            return $this->connecterEnTantQue();
+        }
+
+        return $this->chargerUtilisateurParSonLogin($identifier);
+    }
+    /**
+     * Symfony calls this method if you use features like switch_user
+     * or remember_me.
+     *
+     * If you're not using these features, you do not need to implement
+     * this method.
+     *
      * @param $username
      * @return UserInterface
      * @test testLoadUserByUsername()
      */
-    public function loadUserByUsername($username)
+    final public function loadUserByUsername($username)
     {
         if ($this->session->has('enTantQue.restaurer')) {
             $this->restaurerUtilisateurReferent();
@@ -203,5 +225,10 @@ class UserProvider implements UserProviderInterface
         $this->session->remove(SECONNECTER_REFERENT);
         $this->session->remove(SECONNECTER_USEROBJECT);
         $this->session->remove('enTantQue.restaurer');
+    }
+
+    public function __call($name, $arguments)
+    {
+        // TODO: Implement @method UserInterface loadUserByIdentifier(string $identifier)
     }
 }

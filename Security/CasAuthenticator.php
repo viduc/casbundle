@@ -1,9 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
+/******************************************************************************/
+/*                                  CASBUNDLE                                 */
+/*     Auteur: Tristan Fleury - https://github.com/viduc - viduc@mail.fr      */
+/*                              Licence: Apache-2.0                           */
+/******************************************************************************/
 
 namespace Viduc\CasBundle\Security;
 
-use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,22 +43,6 @@ class CasAuthenticator extends AbstractAuthenticator implements AuthenticationEn
             );
             \phpCAS::setNoCasServerValidation();
         }
-        $this->chargerUtilisateurEtq();
-    }
-
-
-    public function chargerUtilisateurEtq(): void
-    {
-        $user = new User();
-        $user->setUsername('test');
-        $tab[] = $user;
-        $user = new User();
-        $user->setUsername('toto');
-        $tab[] = $user;
-        $user = new User();
-        $user->setUsername('tutu');
-        $tab[] = $user;
-        $this->session->set('enTantQue.users', $tab);
     }
 
     /**
@@ -103,10 +90,8 @@ class CasAuthenticator extends AbstractAuthenticator implements AuthenticationEn
         return null;
     }
 
-    public function start(
-        Request $request,
-        AuthenticationException $authException = null
-    ) {
+    public function start(Request $request, AuthenticationException $authException = null)
+    {
         \phpCAS::forceAuthentication();
         $this->session->set('viduc_cas_username', \phpCAS::getUser());
         return new RedirectResponse(
